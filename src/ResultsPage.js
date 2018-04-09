@@ -4,6 +4,7 @@ import update from 'immutability-helper';
 
 const REQUEST_STATUS = {
   PENDING: 'PENDING',
+  FAILED: 'FAILED',
   SUCCEEDED: 'SUCCEEDED'
 };
 
@@ -43,8 +44,9 @@ class ResultsPage extends React.PureComponent {
       }
     }));
 
-    const response = await got.post('https://api.github.com/graphql', {
-      body: `
+    try {
+      const response = await got.post('https://api.github.com/graphql', {
+        body: `
         query ($org_name: String!) {
           organization(login: $org_name) {
             repositories(first: 100, orderBy: {direction: DESC, field: STARGAZERS}) {
@@ -60,29 +62,43 @@ class ResultsPage extends React.PureComponent {
             }
           }
         }
-
+        
         variables {
           "org_name": ${orgName}
         }
-      `
-    });
-
-    this.setState(update(this.state, {
-      requestStatuses: {
-        [orgName]: {
-          $set: REQUEST_STATUS.SUCCEEDED
+        `
+      });
+      
+      this.setState(update(this.state, {
+        requestStatuses: {
+          [orgName]: {
+            $set: REQUEST_STATUS.SUCCEEDED
+          }
+        },
+        responseCache: {
+          [orgName]: {
+            $set: JSON.parse(response.body)
+          }  
         }
-      },
-      responseCache: {
-        [orgName]: {
-          $set: JSON.parse(response.body)
-        }  
-      }
-    }));
+      }));
+    } catch (err) {
+      this.setState(update(this.state, {
+        requestStatuses: {
+          [orgName]: {
+            $set: REQUEST_STATUS.FAILED
+          }
+        }
+      }));
+    }
   }
-
+    
   render() {
     const {orgName} = this.props.match.params;
+
+    if (this.state.requestStatuses[orgName] === REQUEST_STATUS.FAILED) {
+      return <p>Request for {orgName} failed</p>;
+    }
+
     if (this.state.responseCache[orgName]) {
       return <p>Loaded for {orgName}</p>;
     }
