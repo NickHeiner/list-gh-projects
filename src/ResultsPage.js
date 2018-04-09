@@ -46,27 +46,35 @@ class ResultsPage extends React.PureComponent {
 
     try {
       const response = await got.post('https://api.github.com/graphql', {
-        body: `
-        query ($org_name: String!) {
-          organization(login: $org_name) {
-            repositories(first: 100, orderBy: {direction: DESC, field: STARGAZERS}) {
-              nodes {
-                name
-                forks {
-                  totalCount
-                }
-                stargazers {
-                  totalCount
+        json: true,
+        headers: {
+          // This GH token does not have any permissions on my account,
+          // so it's ok to share publicly by deploying it with a client-side app.
+          Authorization: 'bearer be0309a58fd1f4c6dff81e1b63ac1eb8e2f99f8f'
+        },
+        body: {
+          query: `
+            query ($org_name: String!) {
+              organization(login: $org_name) {
+                repositories(first: 100, orderBy: {direction: DESC, field: STARGAZERS}) {
+                  nodes {
+                    name
+                    forks {
+                      totalCount
+                    }
+                    stargazers {
+                      totalCount
+                    }
+                  }
                 }
               }
             }
+          `,
+          variables: {
+            // eslint-disable-next-line camelcase
+            org_name: orgName
           }
         }
-        
-        variables {
-          "org_name": ${orgName}
-        }
-        `
       });
       
       this.setState(update(this.state, {
