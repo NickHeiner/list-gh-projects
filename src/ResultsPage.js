@@ -4,6 +4,9 @@ import update from 'immutability-helper';
 import {withRouter} from 'react-router-dom';
 import {css} from 'glamor';
 import {SMALL_SIZE_MEDIA_QUERY} from './Constants';
+import NumberFormat from 'react-number-format';
+
+const FormattedNumber = ({val}) => <NumberFormat value={val} displayType="text" thousandSeparator />;
 
 const REQUEST_STATUS = {
   PENDING: 'PENDING',
@@ -45,8 +48,8 @@ const CommitResultItem = ({commit}) => {
       <a href={commit.url}>{commit.abbreviatedOid}</a>&nbsp;
     </td>
     <td {...hideForSmallScreens}>
-      (<ColoredText color="#28a745">+{commit.additions}</ColoredText>
-      /<ColoredText color="#cb2431">-{commit.deletions}</ColoredText>)&nbsp;
+      (<ColoredText color="#28a745">+<FormattedNumber val={commit.additions} /></ColoredText>
+      /<ColoredText color="#cb2431">-<FormattedNumber val={commit.deletions} /></ColoredText>)&nbsp;
     </td>
     <td>
       {commit.messageHeadline}
@@ -92,7 +95,9 @@ const RepoResultItem = ({repo}) => {
   return <div {...rootStyles}>
     <div {...headerRowStyles}>
       <h2 {...headerStyles}><a href={url}>{name}</a></h2>
-      <p {...subtitleStyles}>({forks.totalCount} forks; {stargazers.totalCount} stars)</p>
+      <p {...subtitleStyles}>
+        (<FormattedNumber val={forks.totalCount} /> forks; <FormattedNumber val={stargazers.totalCount} /> stars)
+      </p>
     </div>
     <h3 {...commitsHeaderStyles}>Commits</h3>
     <table>
