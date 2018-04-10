@@ -8,6 +8,7 @@ import React from 'react';
 import {css} from 'glamor';
 import {SMALL_SIZE_MEDIA_QUERY} from './Constants';
 import track from './Track';
+import ReduxFrame from './redux/ReduxFrame';
 
 class RouterlessHeader extends React.PureComponent {
   handleOrgNameChange = event => {
@@ -82,8 +83,10 @@ const App = () => {
   </div>;
 };
 
-const RouteFrame = () => <Router>
-  <Route index path="/:orgName?" component={App} />
-</Router>;
+const AppFrame = () => <ReduxFrame>
+  <Router>
+    <Route index path="/:orgName?" component={App} />
+  </Router>
+</ReduxFrame>;
 
-export default RouteFrame;
+export default AppFrame;
