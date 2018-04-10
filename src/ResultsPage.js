@@ -1,5 +1,5 @@
 import React from 'react';
-import got from 'got';
+import axios from 'axios';
 import update from 'immutability-helper';
 import {withRouter} from 'react-router-dom';
 import {css} from 'glamor';
@@ -56,7 +56,10 @@ const CommitResultItem = ({commit}) => {
     </td>
     <td {...imageCellStyles} {...hideForSmallScreens}>
       <img src={commit.author.avatarUrl} alt="" {...imageStyles} />
-      <a href={commit.author.user.url}>{commit.author.name}</a>
+      {commit.author.user ? 
+        <a href={commit.author.user.url}>{commit.author.name}</a> :
+        commit.author.name
+      }
     </td>
   </React.Fragment>;
 };
@@ -147,48 +150,40 @@ class ResultsPage extends React.PureComponent {
     }));
 
     try {
-      const response = await got.post('https://api.github.com/graphql', {
-        json: true,
-        headers: {
-          // This GH token does not have any permissions on my account,
-          // so it's ok to share publicly by deploying it with a client-side app.
-          Authorization: 'bearer be0309a58fd1f4c6dff81e1b63ac1eb8e2f99f8f'
-        },
-        body: {
-          // For simplicity, we'll just do one big request.
-          // One could imagine making the UI more responsive by doing a smaller
-          // and faster request to just fetch repos, and then fetch commits.
-          query: `
-            query ($org_name: String!) {
-              organization(login: $org_name) {
-                repositories(first: 2, orderBy: {direction: DESC, field: STARGAZERS}) {
-                  nodes {
-                    url
-                    name
-                    forks {
-                      totalCount
-                    }
-                    stargazers {
-                      totalCount
-                    }
-                    defaultBranchRef {
-                      target {
-                        ... on Commit {
-                          history(first: 5) {
-                            nodes {
-                              url
-                              abbreviatedOid
-                              id
-                              deletions
-                              additions
-                              messageHeadline
-                              author {
-                                avatarUrl
-                                date
-                                name
-                                user {
-                                  url
-                                }
+      const response = await axios.post('https://api.github.com/graphql', {
+        // For simplicity, we'll just do one big request.
+        // One could imagine making the UI more responsive by doing a smaller
+        // and faster request to just fetch repos, and then fetch commits.
+        query: `
+          query ($org_name: String!) {
+            organization(login: $org_name) {
+              repositories(first: 2, orderBy: {direction: DESC, field: STARGAZERS}) {
+                nodes {
+                  url
+                  name
+                  forks {
+                    totalCount
+                  }
+                  stargazers {
+                    totalCount
+                  }
+                  defaultBranchRef {
+                    target {
+                      ... on Commit {
+                        history(first: 5) {
+                          nodes {
+                            url
+                            abbreviatedOid
+                            id
+                            deletions
+                            additions
+                            messageHeadline
+                            author {
+                              avatarUrl
+                              date
+                              name
+                              user {
+                                url
                               }
                             }
                           }
@@ -199,11 +194,17 @@ class ResultsPage extends React.PureComponent {
                 }
               }
             }
-          `,
-          variables: {
-            // eslint-disable-next-line camelcase
-            org_name: orgName
           }
+        `,
+        variables: {
+          // eslint-disable-next-line camelcase
+          org_name: orgName
+        }
+      }, {
+        headers: {
+          // This GH token does not have any permissions on my account,
+          // so it's ok to share publicly by deploying it with a client-side app.
+          Authorization: 'bearer be0309a58fd1f4c6dff81e1b63ac1eb8e2f99f8f'
         }
       });
       
@@ -215,7 +216,7 @@ class ResultsPage extends React.PureComponent {
         },
         responseCache: {
           [orgName]: {
-            $set: response.body
+            $set: response.data
           }  
         }
       }));
