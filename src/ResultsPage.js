@@ -85,7 +85,7 @@ class ResultsPage extends React.PureComponent {
         },
         responseCache: {
           [orgName]: {
-            $set: JSON.parse(response.body)
+            $set: response.body
           }  
         }
       }));
