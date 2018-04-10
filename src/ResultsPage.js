@@ -2,6 +2,7 @@ import React from 'react';
 import got from 'got';
 import update from 'immutability-helper';
 import {withRouter} from 'react-router-dom';
+import {css} from 'glamor';
 
 const REQUEST_STATUS = {
   PENDING: 'PENDING',
@@ -11,20 +12,50 @@ const REQUEST_STATUS = {
 
 // TODO: Consider cancelling requests.
 
+const BareList = ({children}) => {
+  const styles = css({
+    listStyle: 'none'
+  });
+  return <ul {...styles}>{children}</ul>;
+};
+
 const CommitResultItem = ({commit}) => <p>{commit.messageHeadline}</p>;
 
-const RepoResultItem = ({repo: {name, forks, stargazers, defaultBranchRef}}) => <div>
-  <h2>{name}</h2>
-  <p>{forks.totalCount} forks; {stargazers.totalCount} stars</p>
-  <h3>Commits</h3>
-  <ul>
-    {
-      defaultBranchRef.target.history.nodes.map(
-        commit => <li key={commit.id}><CommitResultItem commit={commit} /></li>
-      )
+const RepoResultItem = ({repo}) => {
+  const {name, forks, stargazers, defaultBranchRef, url} = repo;
+  const headerRowStyles = css({
+    display: 'flex',
+    alignItems: 'baseline'
+  });
+  const headerStyles = css({
+    marginRight: '10px'
+  });
+  const linkStyles = css({
+    color: '#0366d6',
+    textDecoration: 'none',
+    ':hover': {
+      textDecoration: 'underline'
     }
-  </ul>
-</div>;
+  });
+  const subtitleStyles = css({
+    color: '#586069',
+    fontSize: '.85rem'
+  });
+  return <div>
+    <div {...headerRowStyles}>
+      <h2 {...headerStyles}><a href={url} {...linkStyles}>{name}</a></h2>
+      <p {...subtitleStyles}>({forks.totalCount} forks; {stargazers.totalCount} stars)</p>
+    </div>
+    <h3>Commits</h3>
+    <BareList>
+      {
+        defaultBranchRef.target.history.nodes.map(
+          commit => <li key={commit.id}><CommitResultItem commit={commit} /></li>
+        )
+      }
+    </BareList>
+  </div>;
+};
 
 class ResultsPage extends React.PureComponent {
   
@@ -75,8 +106,9 @@ class ResultsPage extends React.PureComponent {
           query: `
             query ($org_name: String!) {
               organization(login: $org_name) {
-                repositories(first: 100, orderBy: {direction: DESC, field: STARGAZERS}) {
+                repositories(first: 2, orderBy: {direction: DESC, field: STARGAZERS}) {
                   nodes {
+                    url
                     name
                     forks {
                       totalCount
@@ -162,13 +194,13 @@ class ResultsPage extends React.PureComponent {
         return <p>Organization {orgName} does not exist.</p>;
       }
 
-      return <ul>
+      return <BareList>
         {
           response.data.organization.repositories.nodes.map(repo => 
             <li key={repo.name}><RepoResultItem repo={repo} /></li>
           )
         }
-      </ul>;
+      </BareList>;
     }
 
     return <p>Loading: {orgName}</p>;

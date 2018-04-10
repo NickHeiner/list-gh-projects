@@ -14,16 +14,12 @@ class RouterlessHeader extends React.PureComponent {
 
   render() {
     const styles = css({
-      display: 'flex'
+      display: 'flex',
+      alignItems: 'center'
     });
     const headerStyles = css({
       color: 'rgba(255,255,255,0.75)',
       marginRight: '10px'
-    });
-    const inputWrapperStyles = css({
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'center'
     });
     const inputHeight = '2rem';
     const inputStyles = css({
@@ -42,11 +38,9 @@ class RouterlessHeader extends React.PureComponent {
 
           TODO: Add label for accessibility and usability.
       */}
-      <div {...inputWrapperStyles}>
-        <input type="text" placeholder="netflix"
-          aria-labelledby="header" {...inputStyles}
-          onChange={this.handleOrgNameChange} value={this.props.match.params.orgName || ''} />
-      </div>
+      <input type="text" placeholder="netflix"
+        aria-labelledby="header" {...inputStyles}
+        onChange={this.handleOrgNameChange} value={this.props.match.params.orgName || ''} />
     </div>;
   }
 }
