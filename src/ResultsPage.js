@@ -10,6 +10,11 @@ const REQUEST_STATUS = {
 
 // TODO: Consider cancelling requests.
 
+const RepoResultItem = ({repo: {name, forks, stargazers}}) => <div>
+  <h2>{name}</h2>
+  <p>{forks.totalCount} forks; {stargazers.totalCount} stars</p>
+</div>;
+
 class ResultsPage extends React.PureComponent {
   
   constructor() {
@@ -107,8 +112,24 @@ class ResultsPage extends React.PureComponent {
       return <p>Request for {orgName} failed</p>;
     }
 
-    if (this.state.responseCache[orgName]) {
-      return <p>Loaded for {orgName}</p>;
+    const response = this.state.responseCache[orgName];
+    if (response) {
+      if (!response.data.organization) {
+        // It could be that the organization is not publicly visible,
+        // in which case GH would not even confirm its existence. In that case, 
+        // we would want to make this error message a bit more precise. Can
+        // organizations be hidden from the public? I'm not sure, but it doesn't
+        // seem like a great use of time to find out. :)
+        return <p>Organization {orgName} does not exist.</p>;
+      }
+
+      return <ul>
+        {
+          response.data.organization.repositories.nodes.map(repo => 
+            <li key={repo.name}><RepoResultItem repo={repo} /></li>
+          )
+        }
+      </ul>;
     }
 
     return <p>Loading: {orgName}</p>;
