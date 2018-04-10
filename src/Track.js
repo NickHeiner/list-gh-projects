@@ -1,3 +1,3 @@
 export default (...eventArgs) => {
-  window.ga('send', 'event', ...eventArgs);
+  window.gtag('send', 'event', ...eventArgs);
 };

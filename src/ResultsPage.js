@@ -6,6 +6,7 @@ import {css} from 'glamor';
 import {SMALL_SIZE_MEDIA_QUERY} from './Constants';
 import NumberFormat from 'react-number-format';
 import track from './Track';
+import moment from 'moment';
 
 const FormattedNumber = ({val}) => <NumberFormat value={val} displayType="text" thousandSeparator />;
 
@@ -15,7 +16,10 @@ const REQUEST_STATUS = {
   SUCCEEDED: 'SUCCEEDED'
 };
 
-// TODO: Consider cancelling requests.
+/**
+ * The API results won't change too often, so this should be a safe cache time.
+ */
+const cacheLifetimeMs = moment.duration(1, 'hour').asMilliseconds();
 
 const BareList = ({children}) => {
   const styles = css({
@@ -162,12 +166,20 @@ class ResultsPage extends React.PureComponent {
   async fetchDataForOrgName() {
     const {orgName} = this.props.match.params;
     const trackDataLoad = eventAction => track('data-load', eventAction, orgName);
-    if (this.state.responseCache[orgName]) {
-      trackDataLoad('cache-hit');
-      return;
+    const cachedEntry = this.state.responseCache[orgName];
+    if (cachedEntry) {
+      if (Date.now() - cachedEntry.savedAtMs < cacheLifetimeMs) {
+        trackDataLoad('cache-hit');
+        return;
+      }
+      trackDataLoad('cache-stale');
     }
     
-    if (this.state.requestStatuses[orgName] || !orgName) {
+    /*
+      If the request failed previously, we won't try it again. We could build in a retry mechanism,
+      but for a simple internal tool like this, it's probably better to just ask the user to refresh.
+    */
+    if ([REQUEST_STATUS.FAILED, REQUEST_STATUS.PENDING].includes(this.state.requestStatuses[orgName]) || !orgName) {
       return;
     }
     
@@ -250,7 +262,10 @@ class ResultsPage extends React.PureComponent {
         },
         responseCache: {
           [orgName]: {
-            $set: response.data
+            $set: {
+              savedAtMs: Date.now(),
+              response: response.data
+            }
           }  
         }
       });
@@ -282,9 +297,9 @@ class ResultsPage extends React.PureComponent {
       return <p>Request for {orgName} failed</p>;
     }
 
-    const response = this.state.responseCache[orgName];
-    if (response) {
-      if (!response.data.organization) {
+    const cachedEntry = this.state.responseCache[orgName];
+    if (cachedEntry) {
+      if (!cachedEntry.response.data.organization) {
         // It could be that the organization is not publicly visible,
         // in which case GH would not even confirm its existence. In that case, 
         // we would want to make this error message a bit more precise. Can
@@ -295,7 +310,7 @@ class ResultsPage extends React.PureComponent {
 
       return <BareList>
         {
-          response.data.organization.repositories.nodes.map(repo => 
+          cachedEntry.response.data.organization.repositories.nodes.map(repo => 
             <li key={repo.name}><RepoResultItem repo={repo} /></li>
           )
         }
