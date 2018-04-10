@@ -3,12 +3,9 @@ import axios from 'axios';
 import update from 'immutability-helper';
 import {withRouter} from 'react-router-dom';
 import {css} from 'glamor';
-import {SMALL_SIZE_MEDIA_QUERY} from './Constants';
-import NumberFormat from 'react-number-format';
 import track from './Track';
 import moment from 'moment';
-
-const FormattedNumber = ({val}) => <NumberFormat value={val} displayType="text" thousandSeparator />;
+import RepoResultItem from './RepoResultItem';
 
 const REQUEST_STATUS = {
   PENDING: 'PENDING',
@@ -27,104 +24,6 @@ const BareList = ({children}) => {
     listStyle: 'none'
   });
   return <ul {...styles}>{children}</ul>;
-};
-
-const ColoredText = ({children, color}) => <span {...css({color})}>{children}</span>;
-
-const CommitResultItem = ({commit}) => {
-  const imageSideLength = '20px';
-  const imageCellStyles = css({
-    display: 'flex',
-    alignItems: 'center'
-  });
-  const imageStyles = css({
-    width: imageSideLength,
-    height: imageSideLength,
-    borderRadius: '2px',
-    marginRight: '5px'
-  });
-  const hideForSmallScreensStyles = css({
-    [SMALL_SIZE_MEDIA_QUERY]: {
-      display: 'none'
-    }
-  });
-  return <React.Fragment>
-    <td>
-      <a href={commit.url}>{commit.abbreviatedOid}</a>&nbsp;
-    </td>
-    <td {...hideForSmallScreensStyles}>
-      (<ColoredText color="#28a745">+<FormattedNumber val={commit.additions} /></ColoredText>
-      /<ColoredText color="#cb2431">-<FormattedNumber val={commit.deletions} /></ColoredText>)&nbsp;
-    </td>
-    <td>
-      {commit.messageHeadline}
-    </td>
-    <td {...imageCellStyles} {...hideForSmallScreensStyles}>
-      {/* These images will still be requested on smaller screens, because 
-          they are loaded into the DOM, even though they are hidden. If we 
-          wanted to fix this, we could use window.matchMedia. However, that
-          gets more complicated, because we need to redo the check every
-          time the window resizes. That would have its own performance implications.
-          For now, I think this is fine.
-      */}
-      <img src={commit.author.avatarUrl} alt="" {...imageStyles} />
-      {commit.author.user 
-        ? <a href={commit.author.user.url}>{commit.author.name}</a>
-        : commit.author.name
-      }
-    </td>
-  </React.Fragment>;
-};
-
-const RepoResultItem = ({repo}) => {
-  const {name, forks, stargazers, defaultBranchRef, url} = repo;
-
-  const rootStyles = css({
-    border: '1px rgb(234, 236, 239) solid',
-    marginBottom: '10px',
-    padding: '5px',
-    '& a': {
-      color: '#0366d6',
-      textDecoration: 'none',
-      ':hover': {
-        textDecoration: 'underline'
-      }
-    }
-  });
-  const headerRowStyles = css({
-    display: 'flex',
-    alignItems: 'baseline'
-  });
-  const headerStyles = css({
-    marginTop: 0,
-    marginRight: '10px'
-  });
-  const subtitleStyles = css({
-    color: '#586069',
-    fontSize: '.85rem'
-  });
-  const commitsHeaderStyles = css({
-    marginTop: 0,
-    marginBottom: 0
-  });
-  return <div {...rootStyles}>
-    <div {...headerRowStyles}>
-      <h2 {...headerStyles}><a href={url}>{name}</a></h2>
-      <p {...subtitleStyles}>
-        (<FormattedNumber val={forks.totalCount} /> forks; <FormattedNumber val={stargazers.totalCount} /> stars)
-      </p>
-    </div>
-    <h3 {...commitsHeaderStyles}>Commits</h3>
-    <table>
-      <tbody>
-        {
-          defaultBranchRef.target.history.nodes.map(
-            commit => <tr key={commit.id}><CommitResultItem commit={commit} /></tr>
-          )
-        }
-      </tbody>
-    </table>
-  </div>;
 };
 
 const localStorageKey = 'githubResponseCache';
