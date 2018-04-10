@@ -56,9 +56,9 @@ const CommitResultItem = ({commit}) => {
     </td>
     <td {...imageCellStyles} {...hideForSmallScreens}>
       <img src={commit.author.avatarUrl} alt="" {...imageStyles} />
-      {commit.author.user ? 
-        <a href={commit.author.user.url}>{commit.author.name}</a> :
-        commit.author.name
+      {commit.author.user 
+        ? <a href={commit.author.user.url}>{commit.author.name}</a>
+        : commit.author.name
       }
     </td>
   </React.Fragment>;
