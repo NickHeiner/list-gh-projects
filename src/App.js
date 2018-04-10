@@ -19,6 +19,8 @@ class RouterlessHeader extends React.PureComponent {
           component from controlled to uncontrolled. When `this.props.match.params.orgName`
           is undefined, React can't tell the difference between "we didn't pass an argument
           for `value`" and "we passed an empty value". We'll disambiguate by providing ''.
+
+          TODO: Add label for accessibility and usability.
       */}
       <input type="text" placeholder="netflix"
         onChange={this.handleOrgNameChange} value={this.props.match.params.orgName || ''} />

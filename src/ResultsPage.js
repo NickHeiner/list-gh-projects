@@ -11,9 +11,19 @@ const REQUEST_STATUS = {
 
 // TODO: Consider cancelling requests.
 
-const RepoResultItem = ({repo: {name, forks, stargazers}}) => <div>
+const CommitResultItem = ({commit}) => <p>{commit.messageHeadline}</p>;
+
+const RepoResultItem = ({repo: {name, forks, stargazers, defaultBranchRef}}) => <div>
   <h2>{name}</h2>
   <p>{forks.totalCount} forks; {stargazers.totalCount} stars</p>
+  <h3>Commits</h3>
+  <ul>
+    {
+      defaultBranchRef.target.history.nodes.map(
+        commit => <li key={commit.id}><CommitResultItem commit={commit} /></li>
+      )
+    }
+  </ul>
 </div>;
 
 class ResultsPage extends React.PureComponent {
@@ -59,6 +69,9 @@ class ResultsPage extends React.PureComponent {
           Authorization: 'bearer be0309a58fd1f4c6dff81e1b63ac1eb8e2f99f8f'
         },
         body: {
+          // For simplicity, we'll just do one big request.
+          // One could imagine making the UI more responsive by doing a smaller
+          // and faster request to just fetch repos, and then fetch commits.
           query: `
             query ($org_name: String!) {
               organization(login: $org_name) {
@@ -70,6 +83,27 @@ class ResultsPage extends React.PureComponent {
                     }
                     stargazers {
                       totalCount
+                    }
+                    defaultBranchRef {
+                      target {
+                        ... on Commit {
+                          history(first: 5) {
+                            nodes {
+                              id
+                              messageHeadline
+                              message
+                              author {
+                                avatarUrl
+                                date
+                                name
+                                user {
+                                  url
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
                     }
                   }
                 }
