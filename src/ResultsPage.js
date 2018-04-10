@@ -40,9 +40,9 @@ const CommitResultItem = ({commit}) => {
   });
   const hideForSmallScreens = css({
     [SMALL_SIZE_MEDIA_QUERY]: {
-      display: 'none',
+      display: 'none'
     }
-  })
+  });
   return <React.Fragment>
     <td>
       <a href={commit.url}>{commit.abbreviatedOid}</a>&nbsp;

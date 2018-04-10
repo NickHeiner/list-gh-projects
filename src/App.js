@@ -23,7 +23,7 @@ class RouterlessHeader extends React.PureComponent {
     });
     const headerStyles = css({
       color: 'rgba(255,255,255,0.75)',
-      marginRight: '10px',
+      marginRight: '10px'
     });
     const inputHeight = '2rem';
     const inputStyles = css({
@@ -60,7 +60,7 @@ const App = () => {
     marginLeft: 'auto',
     marginRight: 'auto',
     [SMALL_SIZE_MEDIA_QUERY]: {
-      width: '95vw',
+      width: '95vw'
     }
   });
 
