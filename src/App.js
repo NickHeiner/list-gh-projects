@@ -15,18 +15,26 @@ class RouterlessHeader extends React.PureComponent {
   render() {
     return <div>
       <h1>List GH Projects</h1>
-      <input type="text" placeholder="netflix" onChange={this.handleOrgNameChange} />
+      {/* The `|| ''` in value="" below is to avoid React complaining about switching this
+          component from controlled to uncontrolled. When `this.props.match.params.orgName`
+          is undefined, React can't tell the difference between "we didn't pass an argument
+          for `value`" and "we passed an empty value". We'll disambiguate by providing ''.
+      */}
+      <input type="text" placeholder="netflix"
+        onChange={this.handleOrgNameChange} value={this.props.match.params.orgName || ''} />
     </div>;
   }
 }
 
 const Header = withRouter(RouterlessHeader);
 
+const App = () => <React.Fragment>
+  <Header />
+  <ResultsPage />
+</React.Fragment>;
+
 const RouteFrame = () => <Router>
-  <React.Fragment>
-    <Header />
-    <Route index path="/:orgName" component={ResultsPage} />
-  </React.Fragment>
+  <Route index path="/:orgName?" component={App} />
 </Router>;
 
 export default RouteFrame;

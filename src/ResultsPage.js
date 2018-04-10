@@ -1,6 +1,7 @@
 import React from 'react';
 import got from 'got';
 import update from 'immutability-helper';
+import {withRouter} from 'react-router-dom';
 
 const REQUEST_STATUS = {
   PENDING: 'PENDING',
@@ -37,7 +38,7 @@ class ResultsPage extends React.PureComponent {
 
   async fetchDataForOrgName() {
     const {orgName} = this.props.match.params;
-    if (this.state.requestStatuses[orgName]) {
+    if (this.state.requestStatuses[orgName] || !orgName) {
       return;
     }
 
@@ -108,6 +109,10 @@ class ResultsPage extends React.PureComponent {
   render() {
     const {orgName} = this.props.match.params;
 
+    if (!orgName) {
+      return null;
+    }
+
     if (this.state.requestStatuses[orgName] === REQUEST_STATUS.FAILED) {
       return <p>Request for {orgName} failed</p>;
     }
@@ -136,4 +141,4 @@ class ResultsPage extends React.PureComponent {
   }
 }
 
-export default ResultsPage;
+export default withRouter(ResultsPage);
