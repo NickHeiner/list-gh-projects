@@ -7,9 +7,11 @@ import ResultsPage from './ResultsPage';
 import React from 'react';
 import {css} from 'glamor';
 import {SMALL_SIZE_MEDIA_QUERY} from './Constants';
+import track from './Track';
 
 class RouterlessHeader extends React.PureComponent {
   handleOrgNameChange = event => {
+    track('set-org-name', 'from-input', event.target.value);
     this.props.history.push(`/${event.target.value}`);
   }
 

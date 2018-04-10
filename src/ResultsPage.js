@@ -5,6 +5,7 @@ import {withRouter} from 'react-router-dom';
 import {css} from 'glamor';
 import {SMALL_SIZE_MEDIA_QUERY} from './Constants';
 import NumberFormat from 'react-number-format';
+import track from './Track';
 
 const FormattedNumber = ({val}) => <NumberFormat value={val} displayType="text" thousandSeparator />;
 
@@ -160,10 +161,18 @@ class ResultsPage extends React.PureComponent {
 
   async fetchDataForOrgName() {
     const {orgName} = this.props.match.params;
-    if (this.state.requestStatuses[orgName] || this.state.responseCache[orgName] || !orgName) {
+    const trackDataLoad = eventAction => track('data-load', eventAction, orgName);
+    if (this.state.responseCache[orgName]) {
+      trackDataLoad('cache-hit');
       return;
     }
-
+    
+    if (this.state.requestStatuses[orgName] || !orgName) {
+      return;
+    }
+    
+    trackDataLoad('cache-miss');
+    
     this.setState(update(this.state, {
       requestStatuses: {
         [orgName]: {
@@ -231,6 +240,8 @@ class ResultsPage extends React.PureComponent {
         }
       });
       
+      trackDataLoad('request-success');
+      
       const nextState = update(this.state, {
         requestStatuses: {
           [orgName]: {
@@ -243,10 +254,13 @@ class ResultsPage extends React.PureComponent {
           }  
         }
       });
+      
       window.localStorage.setItem(localStorageKey, JSON.stringify(nextState.responseCache));
 
       this.setState(nextState);
     } catch (err) {
+      trackDataLoad('request-fail');
+      
       this.setState(update(this.state, {
         requestStatuses: {
           [orgName]: {
