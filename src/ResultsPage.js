@@ -115,6 +115,22 @@ const RepoResultItem = ({repo}) => {
   </div>;
 };
 
+const localStorageKey = 'githubResponseCache';
+const getJsonFromLocalStorage = key => {
+  try {
+    return JSON.parse(window.localStorage.getItem(key)) || {};
+  } catch (e) {
+    if (e.name !== 'SyntaxError') {
+      throw e;
+    }
+
+    // If the cache is corrupted in some way, and JSON.parse fails,
+    // just return an empty object. When we write to the cache later,
+    // we will overwrite the corrupted data.
+    return {};
+  }
+}
+
 class ResultsPage extends React.PureComponent {
   
   constructor() {
@@ -122,7 +138,7 @@ class ResultsPage extends React.PureComponent {
 
     // TODO explain rationale
     this.state = {
-      responseCache: {},
+      responseCache: getJsonFromLocalStorage(localStorageKey),
       requestStatuses: {}
     };
   }
@@ -137,7 +153,7 @@ class ResultsPage extends React.PureComponent {
 
   async fetchDataForOrgName() {
     const {orgName} = this.props.match.params;
-    if (this.state.requestStatuses[orgName] || !orgName) {
+    if (this.state.requestStatuses[orgName] || this.state.responseCache[orgName] || !orgName) {
       return;
     }
 
@@ -208,7 +224,7 @@ class ResultsPage extends React.PureComponent {
         }
       });
       
-      this.setState(update(this.state, {
+      const nextState = update(this.state, {
         requestStatuses: {
           [orgName]: {
             $set: REQUEST_STATUS.SUCCEEDED
@@ -219,7 +235,10 @@ class ResultsPage extends React.PureComponent {
             $set: response.data
           }  
         }
-      }));
+      });
+      window.localStorage.setItem(localStorageKey, JSON.stringify(nextState.responseCache));
+
+      this.setState(nextState);
     } catch (err) {
       this.setState(update(this.state, {
         requestStatuses: {
