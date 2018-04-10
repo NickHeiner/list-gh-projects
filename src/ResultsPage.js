@@ -20,7 +20,34 @@ const BareList = ({children}) => {
   return <ul {...styles}>{children}</ul>;
 };
 
-const CommitResultItem = ({commit}) => <p>{commit.messageHeadline}</p>;
+const CommitResultItem = ({commit}) => {
+  const imageSideLength = '20px';
+  const imageCellStyles = css({
+    display: 'flex',
+    alignItems: 'center'
+  })
+  const imageStyles = css({
+    width: imageSideLength,
+    height: imageSideLength,
+    borderRadius: '2px',
+    marginRight: '5px'
+  });
+  return <React.Fragment>
+    <td>
+      <a href={commit.url}>{commit.abbreviatedOid}</a>&nbsp;
+    </td>
+    <td>
+      (+{commit.additions}/-{commit.deletions})&nbsp;
+    </td>
+    <td>
+      {commit.messageHeadline}
+    </td>
+    <td {...imageCellStyles}>
+      <img src={commit.author.avatarUrl} alt="" {...imageStyles} />
+      <a href={commit.author.user.url}>{commit.author.name}</a>
+    </td>
+  </React.Fragment>;
+};
 
 const RepoResultItem = ({repo}) => {
   const {name, forks, stargazers, defaultBranchRef, url} = repo;
@@ -28,7 +55,14 @@ const RepoResultItem = ({repo}) => {
   const rootStyles = css({
     border: '1px rgb(234, 236, 239) solid',
     marginBottom: '10px',
-    padding: '5px'
+    padding: '5px',
+    '& a': {
+      color: '#0366d6',
+      textDecoration: 'none',
+      ':hover': {
+        textDecoration: 'underline'
+      }
+    }
   });
   const headerRowStyles = css({
     display: 'flex',
@@ -37,13 +71,6 @@ const RepoResultItem = ({repo}) => {
   const headerStyles = css({
     marginTop: 0,
     marginRight: '10px'
-  });
-  const linkStyles = css({
-    color: '#0366d6',
-    textDecoration: 'none',
-    ':hover': {
-      textDecoration: 'underline'
-    }
   });
   const subtitleStyles = css({
     color: '#586069',
@@ -55,17 +82,19 @@ const RepoResultItem = ({repo}) => {
   });
   return <div {...rootStyles}>
     <div {...headerRowStyles}>
-      <h2 {...headerStyles}><a href={url} {...linkStyles}>{name}</a></h2>
+      <h2 {...headerStyles}><a href={url}>{name}</a></h2>
       <p {...subtitleStyles}>({forks.totalCount} forks; {stargazers.totalCount} stars)</p>
     </div>
     <h3 {...commitsHeaderStyles}>Commits</h3>
-    <BareList>
-      {
-        defaultBranchRef.target.history.nodes.map(
-          commit => <li key={commit.id}><CommitResultItem commit={commit} /></li>
-        )
-      }
-    </BareList>
+    <table>
+      <tbody>
+        {
+          defaultBranchRef.target.history.nodes.map(
+            commit => <tr key={commit.id}><CommitResultItem commit={commit} /></tr>
+          )
+        }
+      </tbody>
+    </table>
   </div>;
 };
 
@@ -133,9 +162,12 @@ class ResultsPage extends React.PureComponent {
                         ... on Commit {
                           history(first: 5) {
                             nodes {
+                              url
+                              abbreviatedOid
                               id
+                              deletions
+                              additions
                               messageHeadline
-                              message
                               author {
                                 avatarUrl
                                 date
