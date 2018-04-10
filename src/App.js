@@ -6,6 +6,7 @@ import {
 import ResultsPage from './ResultsPage';
 import React from 'react';
 import {css} from 'glamor';
+import {SMALL_SIZE_MEDIA_QUERY} from './Constants';
 
 class RouterlessHeader extends React.PureComponent {
   handleOrgNameChange = event => {
@@ -15,11 +16,14 @@ class RouterlessHeader extends React.PureComponent {
   render() {
     const styles = css({
       display: 'flex',
-      alignItems: 'center'
+      alignItems: 'center',
+      [SMALL_SIZE_MEDIA_QUERY]: {
+        flexDirection: 'column'
+      }
     });
     const headerStyles = css({
       color: 'rgba(255,255,255,0.75)',
-      marginRight: '10px'
+      marginRight: '10px',
     });
     const inputHeight = '2rem';
     const inputStyles = css({
@@ -27,7 +31,10 @@ class RouterlessHeader extends React.PureComponent {
       fontSize: inputHeight,
       backgroundColor: '#404448',
       borderColor: '#292e34',
-      color: '#7d8082'
+      color: '#7d8082',
+      [SMALL_SIZE_MEDIA_QUERY]: {
+        marginBottom: '10px'
+      }
     });
     return <div {...styles}>
       <h1 id="header" {...headerStyles}>View GH projects by org:</h1>
@@ -51,7 +58,10 @@ const App = () => {
   const styles = css({
     width: '90vw',
     marginLeft: 'auto',
-    marginRight: 'auto'
+    marginRight: 'auto',
+    [SMALL_SIZE_MEDIA_QUERY]: {
+      width: '95vw',
+    }
   });
 
   const headerStyles = css({

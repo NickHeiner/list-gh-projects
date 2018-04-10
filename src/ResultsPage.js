@@ -3,6 +3,7 @@ import got from 'got';
 import update from 'immutability-helper';
 import {withRouter} from 'react-router-dom';
 import {css} from 'glamor';
+import {SMALL_SIZE_MEDIA_QUERY} from './Constants';
 
 const REQUEST_STATUS = {
   PENDING: 'PENDING',
@@ -34,18 +35,23 @@ const CommitResultItem = ({commit}) => {
     borderRadius: '2px',
     marginRight: '5px'
   });
+  const hideForSmallScreens = css({
+    [SMALL_SIZE_MEDIA_QUERY]: {
+      display: 'none',
+    }
+  })
   return <React.Fragment>
     <td>
       <a href={commit.url}>{commit.abbreviatedOid}</a>&nbsp;
     </td>
-    <td>
+    <td {...hideForSmallScreens}>
       (<ColoredText color="#28a745">+{commit.additions}</ColoredText>
       /<ColoredText color="#cb2431">-{commit.deletions}</ColoredText>)&nbsp;
     </td>
     <td>
       {commit.messageHeadline}
     </td>
-    <td {...imageCellStyles}>
+    <td {...imageCellStyles} {...hideForSmallScreens}>
       <img src={commit.author.avatarUrl} alt="" {...imageStyles} />
       <a href={commit.author.user.url}>{commit.author.name}</a>
     </td>
