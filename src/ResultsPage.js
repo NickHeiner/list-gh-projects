@@ -20,12 +20,14 @@ const BareList = ({children}) => {
   return <ul {...styles}>{children}</ul>;
 };
 
+const ColoredText = ({children, color}) => <span {...css({color})}>{children}</span>;
+
 const CommitResultItem = ({commit}) => {
   const imageSideLength = '20px';
   const imageCellStyles = css({
     display: 'flex',
     alignItems: 'center'
-  })
+  });
   const imageStyles = css({
     width: imageSideLength,
     height: imageSideLength,
@@ -37,7 +39,8 @@ const CommitResultItem = ({commit}) => {
       <a href={commit.url}>{commit.abbreviatedOid}</a>&nbsp;
     </td>
     <td>
-      (+{commit.additions}/-{commit.deletions})&nbsp;
+      (<ColoredText color="#28a745">+{commit.additions}</ColoredText>
+      /<ColoredText color="#cb2431">-{commit.deletions}</ColoredText>)&nbsp;
     </td>
     <td>
       {commit.messageHeadline}
