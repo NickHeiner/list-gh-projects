@@ -16,6 +16,9 @@ export const names = {
  */
 const cacheLifetimeMs = moment.duration(1, 'hour').asMilliseconds();
 
+const sleepDurationMs = moment.duration(2, 'seconds').asMilliseconds();
+const sleep = () => new Promise((resolve, reject) => setTimeout(resolve, sleepDurationMs));
+
 // eslint-disable-next-line space-before-function-paren
 export const startRequestGroup = orgName => async (dispatch, getState) => {
   const state = getState();
@@ -67,6 +70,9 @@ export const startRequestGroup = orgName => async (dispatch, getState) => {
       return;
     }
 
+    if (!response.data.data) {
+      console.log(response);
+    }
     const repos = _.get(response.data.data.organization, ['repositories', 'nodes'], null);
     const totalCount = _.get(response.data.data.organization, ['repositories', 'totalCount']);
     
@@ -75,14 +81,19 @@ export const startRequestGroup = orgName => async (dispatch, getState) => {
       payload: {
         orgName,
         totalCount,
-        repos: _.keyBy(repos, 'name'),
+        repos: repos && _.keyBy(repos, 'name'),
         savedAtUTC: Date.now()
       }
     });
     
-    const pageInfo = _.get(response.data.data.organization, ['repositories', 'pageInfo']);
+    const pageInfo = _.get(response.data.data.organization, ['repositories', 'pageInfo'], {});
     hasNextPage = pageInfo.hasNextPage;
     cursor = pageInfo.endCursor;
+
+    // I triggered a GH rate limit by hitting the API too quickly. A more sophisticated approach would
+    // watch for the "you're going too fast" message and back off accordingly. As a quick patch, we'll
+    // just introduce a pause.
+    await sleep();
   }
 
   trackDataLoad('finish-request-group-success');

@@ -37,7 +37,8 @@ class RouterlessHeader extends React.PureComponent {
       color: '#7d8082',
       [SMALL_SIZE_MEDIA_QUERY]: {
         marginBottom: '10px'
-      }
+      },
+      flex: 1
     });
     return <div {...styles}>
       <h1 id="header" {...headerStyles}>View GH projects by org:</h1>

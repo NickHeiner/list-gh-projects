@@ -49,15 +49,18 @@ const RepoResultItem = ({repo}) => {
       </p>
     </div>
     <h3 {...commitsHeaderStyles}>Commits</h3>
-    <table {...tableStyles}>
-      <tbody>
-        {
-          defaultBranchRef.target.history.nodes.map(
-            (commit, index) => <CommitResultItem key={commit.id} commit={commit} isEvenRow={Boolean(index % 2)} />
-          )
-        }
-      </tbody>
-    </table>
+    {defaultBranchRef ? 
+      <table {...tableStyles}>
+        <tbody>
+          {
+            defaultBranchRef.target.history.nodes.map(
+              (commit, index) => <CommitResultItem key={commit.id} commit={commit} isEvenRow={Boolean(index % 2)} />
+            )
+          }
+        </tbody>
+      </table> : <p>There is no default branch to pull commits from. The repo could be empty.</p>
+    }
+
   </div>;
 };
 

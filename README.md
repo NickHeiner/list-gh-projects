@@ -110,6 +110,10 @@ If I had time to add tests, I'd favor Selenium-driven browser integration tests.
 
 Selenium tests are undeniably slower, and without a lot of supporting code, can be fairly brittle. However, I find that they have the most value, because they test the "external contract" of the app. Unit tests, although also valuable in for code that's highly unit-testable (well-factored with few side-effects), ultimately do not test what the user cares about.
 
+### Cancelling Unnecessary Requests
+If you search for an org, like "department-of-veterans-affairs", the client will download all repos for that org, even if you navigate away to a different org. These requests could be wasted if the user is never going to go back to the original org. This is particularly problematic when an org name is a prefix of another, since a search is fired for every keystroke.
+
+For example, if you type out a search for `my-org-name`, and `my-org` is another valid org that has 400 repos, then the client will download those 400 repos, even though you aren't going to look at them.
 
 ### More Accessibility
 I added a few `aria` attributes to promote accessibility. However, there is more I could have done:
