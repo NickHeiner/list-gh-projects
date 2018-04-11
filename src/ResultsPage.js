@@ -49,7 +49,7 @@ class UnconnectedResultsPage extends React.PureComponent {
     }
 
     if (this.props.requestStatus === REQUEST_STATUS.FAILED) {
-      return <p>Request for {this.getOrgName()} failed</p>;
+      return <p>Request for {this.getOrgName()} failed.</p>;
     }
 
     const cachedEntry = this.props.response;
@@ -63,7 +63,7 @@ class UnconnectedResultsPage extends React.PureComponent {
     }
 
     if (!cachedEntry) {
-      return <p>Loading: {this.getOrgName()}</p>;
+      return <p>Loading: {this.getOrgName()}.</p>;
     }
 
     return <div>

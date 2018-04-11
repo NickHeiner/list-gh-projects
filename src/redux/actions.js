@@ -20,7 +20,11 @@ export const startRequestGroup = orgName => async (dispatch, getState) => {
   const state = getState();
   const trackDataLoad = eventAction => track('data-load', eventAction, orgName);
 
-  if (state.requestStatuses[orgName] === REQUEST_STATUS.PENDING) {
+  // A more sophisticated tool would retry failures. Based on the type of failure,
+  // we may want exponential backoff. Additionally, our current model will bomb out
+  // an entire request group if any sub-requests fail. It would be better to show
+  // as much data as we can.
+  if ([REQUEST_STATUS.PENDING, REQUEST_STATUS.FAILED].includes(state.requestStatuses[orgName])) {
     return;
   }
   
@@ -54,9 +58,11 @@ export const startRequestGroup = orgName => async (dispatch, getState) => {
       dispatch({
         type: names.FINISH_REQUEST_GROUP,
         payload: {
+          orgName,
           status: REQUEST_STATUS.FAILED
         }
       });
+      return;
     }
 
     const repos = _.get(response.data.data.organization, ['repositories', 'nodes'], null);
@@ -80,6 +86,7 @@ export const startRequestGroup = orgName => async (dispatch, getState) => {
   dispatch({
     type: names.FINISH_REQUEST_GROUP,
     payload: {
+      orgName,
       status: REQUEST_STATUS.SUCCEEDED
     }
   });
