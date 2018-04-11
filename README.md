@@ -102,7 +102,12 @@ I am not a visual designer. I stole the color scheme from GitHub.
 There are a few small visual bugs. For instance, the main search box has an unsightly black border on the left and top sides.
 
 ### Responsive Design
+A proper responsive design starts with the smallest supported screen size, and adds content progressively. In contrast, I designed for my 15" Macbook screen, and put in a few patches to make it less appalling on mobile.
+
 ### Offline
+create-react-app adds uses a plugin to cache static assets with a service worker. I could have also used this to cache GH API requests, but that would have required ejecting create-react-app, which would have made the project much more complicated. Instead, I just used `localStorage`. This basically works, although is fairly coarse-grained as a caching mechanism. In particular, we're caching entire org data sets, which are composed of many API request responses. This may lead to some annoying edge cases that we would not experience if we were caching on a per-request level. Doing the caching in the service worker also has the benefit of being completely encapsulated from the rest of the app.
+
+Additionally, if I had used the service worker, I could have kept images from GitHub avatars working offline as well.
 
 ## Things I'd Add If I Had More Time
 ### Tests
