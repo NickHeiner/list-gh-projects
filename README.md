@@ -96,11 +96,31 @@ It solves the pain points:
 Also, by combining all details necessary to render a component within the component itself, we improve encapsulation. 
 
 ## Corners I Cut
+### Visual Design
+I am not a visual designer. I stole the color scheme from GitHub.
+
+There are a few small visual bugs. For instance, the main search box has an unsightly black border on the left and top sides.
+
 ### Responsive Design
 ### Offline
 
 ## Things I'd Add If I Had More Time
 ### Tests
+If I had time to add tests, I'd favor Selenium-driven browser integration tests. Ideally, they would run using a tool like SauceLabs or BrowserStack to test multiple browser / OS combos. 
+
+Selenium tests are undeniably slower, and without a lot of supporting code, can be fairly brittle. However, I find that they have the most value, because they test the "external contract" of the app. Unit tests, although also valuable in for code that's highly unit-testable (well-factored with few side-effects), ultimately do not test what the user cares about.
+
+
 ### More Accessibility
+I added a few `aria` attributes to promote accessibility. However, there is more I could have done:
+
+1. Screenreader testing
+1. Add `aria` attributes to the `table`s for the recent commits view, so assistive technologies could easily navigate them.
+1. Use ARIA roles to show assistive technology where the search and filter fields are.
+1. Ensure that colors have sufficient contrast.
+
 ### Favicon
+I wanted to replace the default `create-react-app` favicon with the image of a comforting bear:
+
+![Sgt Grumbles](./SgtGrumbles.png)
 
