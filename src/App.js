@@ -8,6 +8,7 @@ import React from 'react';
 import {css} from 'glamor';
 import {SMALL_SIZE_MEDIA_QUERY} from './Constants';
 import track from './Track';
+import ReduxFrame from './redux/ReduxFrame';
 
 class RouterlessHeader extends React.PureComponent {
   handleOrgNameChange = event => {
@@ -44,10 +45,8 @@ class RouterlessHeader extends React.PureComponent {
           component from controlled to uncontrolled. When `this.props.match.params.orgName`
           is undefined, React can't tell the difference between "we didn't pass an argument
           for `value`" and "we passed an empty value". We'll disambiguate by providing ''.
-
-          TODO: Add label for accessibility and usability.
       */}
-      <input type="text" placeholder="netflix"
+      <input type="text" placeholder="department-of-veterans-affairs"
         aria-labelledby="header" {...inputStyles}
         onChange={this.handleOrgNameChange} value={this.props.match.params.orgName || ''} />
     </div>;
@@ -82,8 +81,10 @@ const App = () => {
   </div>;
 };
 
-const RouteFrame = () => <Router>
-  <Route index path="/:orgName?" component={App} />
-</Router>;
+const AppFrame = () => <ReduxFrame>
+  <Router>
+    <Route index path="/:orgName?" component={App} />
+  </Router>
+</ReduxFrame>;
 
-export default RouteFrame;
+export default AppFrame;

@@ -2,10 +2,14 @@ import React from 'react';
 import {css} from 'glamor';
 import {SMALL_SIZE_MEDIA_QUERY} from './Constants';
 import FormattedNumber from './FormattedNumber';
+import moment from 'moment';
 
 const ColoredText = ({children, color}) => <span {...css({color})}>{children}</span>;
 
-const CommitResultItem = ({commit}) => {
+const CommitResultItem = ({commit, isEvenRow}) => {
+  const rowStyle = css({
+    backgroundColor: isEvenRow ? '#eae8e8' : undefined
+  });
   const imageSideLength = '20px';
   const imageCellStyles = css({
     display: 'flex',
@@ -22,7 +26,7 @@ const CommitResultItem = ({commit}) => {
       display: 'none'
     }
   });
-  return <React.Fragment>
+  return <tr {...rowStyle}>
     <td>
       <a href={commit.url}>{commit.abbreviatedOid}</a>&nbsp;
     </td>
@@ -47,7 +51,10 @@ const CommitResultItem = ({commit}) => {
         : commit.author.name
       }
     </td>
-  </React.Fragment>;
+    <td {...hideForSmallScreensStyles}>
+      {moment(commit.author.date).format('MMMM D, YYYY')}
+    </td>
+  </tr>;
 };
 
 export default CommitResultItem;
