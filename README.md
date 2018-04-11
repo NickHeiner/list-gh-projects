@@ -60,7 +60,19 @@ This doesn't work because the `setState` updater may be called multiple times, s
 
 At this point, I felt that I was "going against the grain" of the framework by trying to have side-effects that fed into setting state as part of the component lifecycle. I pulled out Redux, and was very quickly able to get things working. And I felt that the final code had much better separation of concerns.
 
+### GitHub API Usage
+I used the GitHub v4 GraphQL API. In general, I enjoyed the high degree of flexibility that came with being able to define my own schema for the response type. However, if I controlled the backend and were optimizing for this frontend, I'd structure it differently.
+
+The API implements pagination with an opaque cursor. When the client requests a page, the server provides `next` and `previous` cursors. The move through the result set, the client uses those cursors on subsequent requests. This likely makes sense for GH's internals, but it means that the client can't use a lazy-loading approach where it only requests a subsection of the result set. For instance, imagine that the client only shows a scrolling window of 10 items. To start, it would show items `0 ... 10`. If the user scrolled rapidly, they could come to a stop on the location for items `53 ... 63`. To render those items, the client would want to request that range specifically. However, that's not possible with the opaque cursor approach. Instead, the client needs to download the entire result set, and do the filtering client-side.
+
+My ideal API would be a stream, perhaps delivered over a websocket. The client would request a range of the stream, and could render the results one by one as they're available from the server. If the user changes the scroll window mid-stream, the client could use the websocket to request a different range. Responses that arrived for the original range would be saved client-side for later.
+
+### CSS-in-JS
+I'm still relatively new to CSS-in-JS, but my experience thus far has been overwhelmingly positive. 
+
 ## Corners I Cut
+### Responsive Design
+### Offline
 
 ## Things I'd Add If I Had More Time
 ### Tests

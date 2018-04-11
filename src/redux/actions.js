@@ -32,6 +32,7 @@ export const startRequestGroup = orgName => async (dispatch, getState) => {
   if (state.requestStatuses[orgName] === REQUEST_STATUS.SUCCEEDED) {
     const cachedEntry = this.state.responseCache[orgName];
     if (cachedEntry) {
+      // TODO ensure this still works
       if (Date.now() - cachedEntry.savedAtUTC < cacheLifetimeMs) {
         trackDataLoad('cache-hit');
         return;
