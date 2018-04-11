@@ -60,17 +60,20 @@ export const startRequestGroup = orgName => async (dispatch, getState) => {
     }
 
     const repos = _.get(response.data.data.organization, ['repositories', 'nodes'], null);
-
+    const totalCount = _.get(response.data.data.organization, ['repositories', 'totalCount']);
+    
     dispatch({
       type: names.UPDATE_ORG_REPOS,
       payload: {
         orgName,
+        totalCount,
         repos: _.keyBy(repos, 'name')
       }
     });
-
-    hasNextPage = _.get(response.data.data.organization, ['repositories', 'pageInfo', 'hasNextPage']);
-    cursor = _.get(response.data.data.organization, ['repositories', 'pageInfo', 'endCursor']);
+    
+    const pageInfo = _.get(response.data.data.organization, ['repositories', 'pageInfo']);
+    hasNextPage = pageInfo.hasNextPage;
+    cursor = pageInfo.endCursor;
   }
 
   trackDataLoad('finish-request-group-success');

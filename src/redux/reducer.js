@@ -1,6 +1,7 @@
 import {names} from './actions';
 import update from 'immutability-helper';
 import {REQUEST_STATUS} from '../Constants';
+import _ from 'lodash';
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -28,7 +29,13 @@ const reducer = (state, action) => {
             return null;
           }
 
-          return {...prevVal, ...action.payload.repos};
+          return {
+            totalCount: action.payload.totalCount,
+            repos: {
+              ..._.get(prevVal, 'repos'),
+              ...action.payload.repos
+            }
+          };
         }
       }
     });

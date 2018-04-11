@@ -62,17 +62,20 @@ class UnconnectedResultsPage extends React.PureComponent {
       return <p>Organization {this.getOrgName()} does not exist.</p>;
     }
 
-    if (this.props.requestStatus === REQUEST_STATUS.PENDING && !cachedEntry) {
+    if (!cachedEntry) {
       return <p>Loading: {this.getOrgName()}</p>;
     }
 
-    return <BareList>
-      {
-        _(cachedEntry).values().map(repo => 
-          <li key={repo.name}><RepoResultItem repo={repo} /></li>
-        ).value()
-      }
-    </BareList>;
+    return <div>
+      Loaded {_.size(cachedEntry.repos)} of {cachedEntry.totalCount} repos.
+      <BareList>
+        {
+          _(cachedEntry.repos).values().map(repo => 
+            <li key={repo.name}><RepoResultItem repo={repo} /></li>
+          ).value()
+        }
+      </BareList>
+    </div>;
   }
 }
 
