@@ -64,7 +64,8 @@ export const startRequestGroup = orgName => async (dispatch, getState) => {
     dispatch({
       type: names.UPDATE_ORG_REPOS,
       payload: {
-        repos
+        orgName,
+        repos: _.keyBy(repos, 'name')
       }
     });
 

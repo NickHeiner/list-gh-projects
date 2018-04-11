@@ -1,24 +1,37 @@
 import {names} from './actions';
 import update from 'immutability-helper';
+import {REQUEST_STATUS} from '../Constants';
 
 const reducer = (state, action) => {
   switch (action.type) {
-  case names.INCREMENT: 
+  case names.START_REQUEST_GROUP: 
     return update(state, {
-      counter: {
-        $apply: x => x + 1
+      requestStatuses: {
+        [action.payload.orgName]: {
+          $set: REQUEST_STATUS.PENDING
+        }
       }
     });
-  case names.INCREMENT_START: {
+  case names.FINISH_REQUEST_GROUP: 
     return update(state, {
-      counterLoading: {$set: true}
+      requestStatuses: {
+        [action.payload.orgName]: {
+          $set: action.payload.status
+        }
+      }
     });
-  }
-  case names.INCREMENT_END: {
+  case names.UPDATE_ORG_REPOS: 
     return update(state, {
-      counterLoading: {$set: false}
+      responses: {
+        [action.payload.orgName]: prevVal => {
+          if (!action.payload.repos) {
+            return null;
+          }
+
+          return {...prevVal, ...action.payload.repos};
+        }
+      }
     });
-  }
   default:
     return state;
   }

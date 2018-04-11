@@ -1,13 +1,12 @@
 import React from 'react';
-import update from 'immutability-helper';
 import {withRouter} from 'react-router-dom';
 import {css} from 'glamor';
-import track from './Track';
 import RepoResultItem from './RepoResultItem';
 import {REQUEST_STATUS} from './Constants';
 import {connect} from 'react-redux';
 import {startRequestGroup} from './redux/actions';
 import {bindActionCreators} from 'redux';
+import _ from 'lodash';
 
 const BareList = ({children}) => {
   const styles = css({
@@ -54,26 +53,26 @@ class UnconnectedResultsPage extends React.PureComponent {
     }
 
     const cachedEntry = this.props.response;
-    if (cachedEntry) {
-      if (!cachedEntry.response.data.organization) {
-        // It could be that the organization is not publicly visible,
-        // in which case GH would not even confirm its existence. In that case, 
-        // we would want to make this error message a bit more precise. Can
-        // organizations be hidden from the public? I'm not sure, but it doesn't
-        // seem like a great use of time to find out. :)
-        return <p>Organization {this.getOrgName()} does not exist.</p>;
-      }
-
-      return <BareList>
-        {
-          cachedEntry.response.data.organization.repositories.nodes.map(repo => 
-            <li key={repo.name}><RepoResultItem repo={repo} /></li>
-          )
-        }
-      </BareList>;
+    if (cachedEntry === null) {
+      // It could be that the organization is not publicly visible,
+      // in which case GH would not even confirm its existence. In that case, 
+      // we would want to make this error message a bit more precise. Can
+      // organizations be hidden from the public? I'm not sure, but it doesn't
+      // seem like a great use of time to find out. :)
+      return <p>Organization {this.getOrgName()} does not exist.</p>;
     }
 
-    return <p>Loading: {this.getOrgName()}</p>;
+    if (this.props.requestStatus === REQUEST_STATUS.PENDING && !cachedEntry) {
+      return <p>Loading: {this.getOrgName()}</p>;
+    }
+
+    return <BareList>
+      {
+        _(cachedEntry).values().map(repo => 
+          <li key={repo.name}><RepoResultItem repo={repo} /></li>
+        ).value()
+      }
+    </BareList>;
   }
 }
 
