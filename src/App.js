@@ -7,54 +7,8 @@ import ResultsPage from './ResultsPage';
 import React from 'react';
 import {css} from 'glamor';
 import {SMALL_SIZE_MEDIA_QUERY} from './Constants';
-import track from './Track';
 import ReduxFrame from './redux/ReduxFrame';
-
-class RouterlessHeader extends React.PureComponent {
-  handleOrgNameChange = event => {
-    track('set-org-name', 'from-input', event.target.value);
-    this.props.history.push(`/${event.target.value}`);
-  }
-
-  render() {
-    const styles = css({
-      display: 'flex',
-      alignItems: 'center',
-      [SMALL_SIZE_MEDIA_QUERY]: {
-        flexDirection: 'column'
-      }
-    });
-    const headerStyles = css({
-      color: 'rgba(255,255,255,0.75)',
-      marginRight: '10px'
-    });
-    const inputHeight = '2rem';
-    const inputStyles = css({
-      height: inputHeight,
-      fontSize: inputHeight,
-      backgroundColor: '#404448',
-      borderColor: '#292e34',
-      color: '#7d8082',
-      [SMALL_SIZE_MEDIA_QUERY]: {
-        marginBottom: '10px'
-      },
-      flex: 1
-    });
-    return <div {...styles}>
-      <h1 id="header" {...headerStyles}>View GH projects by org:</h1>
-      {/* The `|| ''` in value="" below is to avoid React complaining about switching this
-          component from controlled to uncontrolled. When `this.props.match.params.orgName`
-          is undefined, React can't tell the difference between "we didn't pass an argument
-          for `value`" and "we passed an empty value". We'll disambiguate by providing ''.
-      */}
-      <input type="text" placeholder="department-of-veterans-affairs"
-        aria-labelledby="header" {...inputStyles}
-        onChange={this.handleOrgNameChange} value={this.props.match.params.orgName || ''} />
-    </div>;
-  }
-}
-
-const Header = withRouter(RouterlessHeader);
+import Header from './Header';
 
 const App = () => {
   const rootStyles = css({
