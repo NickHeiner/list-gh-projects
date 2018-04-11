@@ -46,7 +46,7 @@ const RepoResultItem = ({repo}) => {
       <tbody>
         {
           defaultBranchRef.target.history.nodes.map(
-            commit => <tr key={commit.id}><CommitResultItem commit={commit} /></tr>
+            (commit, index) => <CommitResultItem key={commit.id} commit={commit} isEvenRow={Boolean(index % 2)} />
           )
         }
       </tbody>

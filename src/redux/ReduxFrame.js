@@ -3,6 +3,7 @@ import {createStore, applyMiddleware, compose} from 'redux';
 import {Provider} from 'react-redux';
 import reducer from './reducer';
 import thunk from 'redux-thunk';
+import _ from 'lodash';
 
 const initialState = {
   requestStatuses: {
@@ -11,7 +12,8 @@ const initialState = {
     // org name is. If we wanted to make this more robust, we'd have
     // a finer-grained mechanism to retry individual requests.
   },
-  responses: {}
+  responses: {},
+  repoFilter: ''
 };
 const localStorageKey = 'githubResponseCache';
 
@@ -39,7 +41,10 @@ const store = createStore(
   composeEnhancers(applyMiddleware(thunk))
 );
 
-store.subscribe(() => window.localStorage.setItem(localStorageKey, JSON.stringify(store.getState())));
+store.subscribe(() => {
+  const stateToSerialize = _.omit(store.getState(), 'repoFilter');
+  window.localStorage.setItem(localStorageKey, JSON.stringify(stateToSerialize));
+});
 
 const ReduxFrame = ({children}) => <Provider store={store}>{children}</Provider>;
 

@@ -39,6 +39,12 @@ const reducer = (state, action) => {
         }
       }
     });
+  case names.SET_REPO_FILTER:
+    return update(state, {
+      repoFilter: {
+        $set: action.payload.repoFilter
+      }
+    });
   default:
     return state;
   }

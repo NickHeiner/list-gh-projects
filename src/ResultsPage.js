@@ -4,7 +4,7 @@ import {css} from 'glamor';
 import RepoResultItem from './RepoResultItem';
 import {REQUEST_STATUS} from './Constants';
 import {connect} from 'react-redux';
-import {startRequestGroup} from './redux/actions';
+import {startRequestGroup, setRepoFilter} from './redux/actions';
 import {bindActionCreators} from 'redux';
 import _ from 'lodash';
 
@@ -50,14 +50,38 @@ class UnconnectedResultsPage extends React.PureComponent {
       return <p>Loading: {this.getOrgName()}.</p>;
     }
 
+    const controlBarStyles = css({
+      display: 'flex'
+    });
+
+    const labelStyles = css({
+      marginRight: '10px'
+    });
+
+    // TODO This is not working and I'm not sure why.
+    const filterStyles = css({
+      alignSelf: 'flex-end'
+    });
+
     return <div>
-      Loaded {_.size(cachedEntry.repos)} of {cachedEntry.totalCount} repos.
+      <div {...controlBarStyles}>
+        <span>Loaded {_.size(cachedEntry.repos)} of {cachedEntry.totalCount} repos.</span>
+        <div {...filterStyles}>
+          <span {...labelStyles}>Filter repos:</span>
+          <input type="text" 
+            onChange={this.props.setRepoFilter} 
+            value={this.props.repoFilter} 
+            placeholder={_(cachedEntry.repos).keys().first()} />
+        </div>
+      </div>
+      {/* TODO use react-virtualized here. */}
       <BareList>
         {
           _(cachedEntry.repos)
             .values()
             // For perf, we could do this sort in a Redux selector.
             .sortBy(repo => -repo.stargazers.totalCount)
+            .filter(repo => !this.props.repoFilter || repo.name.includes(this.props.repoFilter))
             .map(repo => 
               <li key={repo.name}><RepoResultItem repo={repo} /></li>
             )
@@ -70,11 +94,13 @@ class UnconnectedResultsPage extends React.PureComponent {
 
 const ResultsPage = connect(
   (state, ownProps) => ({
+    repoFilter: state.repoFilter,
     requestStatus: state.requestStatuses[ownProps.match.params.orgName],
     response: state.responses[ownProps.match.params.orgName]
   }),
   dispatch => bindActionCreators({
-    startRequestGroup
+    startRequestGroup,
+    setRepoFilter
   }, dispatch)
 )(UnconnectedResultsPage);
 

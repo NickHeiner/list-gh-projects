@@ -7,7 +7,8 @@ import _ from 'lodash';
 export const names = {
   START_REQUEST_GROUP: 'START_REQUEST_GROUP',
   FINISH_REQUEST_GROUP: 'FINISH_REQUEST_GROUP',
-  UPDATE_ORG_REPOS: 'UPDATE_ORG_REPOS'
+  UPDATE_ORG_REPOS: 'UPDATE_ORG_REPOS',
+  SET_REPO_FILTER: 'SET_REPO_FILTER'
 };
 
 /**
@@ -92,3 +93,10 @@ export const startRequestGroup = orgName => async (dispatch, getState) => {
     }
   });
 };
+
+export const setRepoFilter = event => ({
+  type: names.SET_REPO_FILTER,
+  payload: {
+    repoFilter: event.target.value
+  }
+});
