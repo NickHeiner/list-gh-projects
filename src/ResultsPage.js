@@ -57,8 +57,14 @@ class UnconnectedResultsPage extends React.PureComponent {
       marginBottom: '10px'
     });
 
+    const labelMarginPx = 10;
+
     const labelStyles = css({
-      marginRight: '10px'
+      marginRight: `${labelMarginPx}px`
+    });
+
+    const loadedStyles = css({
+      marginRight: `${labelMarginPx * 2}px`
     });
 
     // TODO This is not working and I'm not sure why.
@@ -68,7 +74,7 @@ class UnconnectedResultsPage extends React.PureComponent {
 
     return <div>
       <div {...controlBarStyles}>
-        <span>Loaded {_.size(cachedEntry.repos)} of {cachedEntry.totalCount} repos.</span>
+        <span {...loadedStyles}>Loaded {_.size(cachedEntry.repos)} of {cachedEntry.totalCount} repos.</span>
         <div {...filterStyles}>
           <span {...labelStyles}>Filter repos:</span>
           <input type="text" 
