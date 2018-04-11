@@ -1,7 +1,6 @@
 import {
   HashRouter as Router,
-  Route,
-  withRouter
+  Route
 } from 'react-router-dom';
 import ResultsPage from './ResultsPage';
 import React from 'react';
