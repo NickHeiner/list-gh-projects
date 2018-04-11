@@ -62,14 +62,15 @@ const App = () => {
     marginRight: 'auto',
     [SMALL_SIZE_MEDIA_QUERY]: {
       width: '95vw'
-    }
+    },
+    height: '100%'
   });
 
   const headerStyles = css({
     background: '#24292e'
   });
 
-  return <div>
+  return <React.Fragment>
     <div {...headerStyles}>
       <div {...styles} >
         <Header />
@@ -78,7 +79,7 @@ const App = () => {
     <div {...styles}>
       <ResultsPage />
     </div>
-  </div>;
+  </React.Fragment>;
 };
 
 const AppFrame = () => <ReduxFrame>

@@ -7,12 +7,14 @@ import {connect} from 'react-redux';
 import {startRequestGroup, setRepoFilter} from './redux/actions';
 import {bindActionCreators} from 'redux';
 import _ from 'lodash';
+import {AutoSizer, List} from 'react-virtualized';
 
 const BareList = ({children}) => {
   const styles = css({
     paddingLeft: 0,
     listStyle: 'none',
-    marginTop: 0
+    marginTop: 0,
+    height: '100%'
   });
   return <ul {...styles}>{children}</ul>;
 };
@@ -72,7 +74,20 @@ class UnconnectedResultsPage extends React.PureComponent {
       alignSelf: 'flex-end'
     });
 
-    return <div>
+    const repos = _(cachedEntry.repos)
+      .values()
+      // For perf, we could do this sort in a Redux selector.
+      .sortBy(repo => -repo.stargazers.totalCount)
+      .filter(repo => !this.props.repoFilter || repo.name.includes(this.props.repoFilter))
+      .value();
+
+    const rootStyles = css({
+      display: 'flex', 
+      flexDirection: 'column',
+      height: '100%'
+    });
+
+    return <div {...rootStyles}>
       <div {...controlBarStyles}>
         <span {...loadedStyles}>Loaded {_.size(cachedEntry.repos)} of {cachedEntry.totalCount} repos.</span>
         <div {...filterStyles}>
@@ -83,19 +98,18 @@ class UnconnectedResultsPage extends React.PureComponent {
             placeholder={_(cachedEntry.repos).keys().first()} />
         </div>
       </div>
-      {/* TODO use react-virtualized here. */}
       <BareList>
-        {
-          _(cachedEntry.repos)
-            .values()
-            // For perf, we could do this sort in a Redux selector.
-            .sortBy(repo => -repo.stargazers.totalCount)
-            .filter(repo => !this.props.repoFilter || repo.name.includes(this.props.repoFilter))
-            .map(repo => 
-              <li key={repo.name}><RepoResultItem repo={repo} /></li>
-            )
-            .value()
-        }
+        <AutoSizer>
+          {({ height, width }) => (
+            <List
+              rowCount={repos.length}
+              height={height}
+              rowHeight={285}
+              rowRenderer={({ index, key, style }) => <li key={key} style={style}><RepoResultItem repo={repos[index]} /></li>}
+              width={width}
+            />
+          )}
+        </AutoSizer>
       </BareList>
     </div>;
   }
