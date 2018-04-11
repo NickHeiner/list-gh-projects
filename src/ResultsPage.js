@@ -11,7 +11,8 @@ import _ from 'lodash';
 const BareList = ({children}) => {
   const styles = css({
     paddingLeft: 0,
-    listStyle: 'none'
+    listStyle: 'none',
+    marginTop: 0
   });
   return <ul {...styles}>{children}</ul>;
 };
@@ -51,7 +52,9 @@ class UnconnectedResultsPage extends React.PureComponent {
     }
 
     const controlBarStyles = css({
-      display: 'flex'
+      display: 'flex',
+      marginTop: '10px',
+      marginBottom: '10px'
     });
 
     const labelStyles = css({
