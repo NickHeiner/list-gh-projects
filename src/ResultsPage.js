@@ -16,21 +16,7 @@ const BareList = ({children}) => {
   return <ul {...styles}>{children}</ul>;
 };
 
-const localStorageKey = 'githubResponseCache';
-const getJsonFromLocalStorage = key => {
-  try {
-    return JSON.parse(window.localStorage.getItem(key)) || {};
-  } catch (e) {
-    if (e.name !== 'SyntaxError') {
-      throw e;
-    }
 
-    // If the cache is corrupted in some way, and JSON.parse fails,
-    // just return an empty object. When we write to the cache later,
-    // we will overwrite the corrupted data.
-    return {};
-  }
-};
 
 class UnconnectedResultsPage extends React.PureComponent {
   getOrgName = () => this.props.match.params.orgName;
@@ -65,6 +51,7 @@ class UnconnectedResultsPage extends React.PureComponent {
     if (!cachedEntry) {
       return <p>Loading: {this.getOrgName()}.</p>;
     }
+    // TODO remember to sort the repos list, because we cannot depend on the iteration order.
 
     return <div>
       Loaded {_.size(cachedEntry.repos)} of {cachedEntry.totalCount} repos.

@@ -31,7 +31,7 @@ export const startRequestGroup = orgName => async (dispatch, getState) => {
   if (state.requestStatuses[orgName] === REQUEST_STATUS.SUCCEEDED) {
     const cachedEntry = this.state.responseCache[orgName];
     if (cachedEntry) {
-      if (Date.now() - cachedEntry.savedAtMs < cacheLifetimeMs) {
+      if (Date.now() - cachedEntry.savedAtUTC < cacheLifetimeMs) {
         trackDataLoad('cache-hit');
         return;
       }
@@ -73,7 +73,8 @@ export const startRequestGroup = orgName => async (dispatch, getState) => {
       payload: {
         orgName,
         totalCount,
-        repos: _.keyBy(repos, 'name')
+        repos: _.keyBy(repos, 'name'),
+        savedAtUTC: Date.now()
       }
     });
     

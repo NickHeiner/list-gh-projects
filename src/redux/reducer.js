@@ -30,7 +30,7 @@ const reducer = (state, action) => {
           }
 
           return {
-            totalCount: action.payload.totalCount,
+            ..._.pick(action.payload, 'totalCount', 'savedAtUTC'),
             repos: {
               ..._.get(prevVal, 'repos'),
               ...action.payload.repos
