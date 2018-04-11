@@ -55,6 +55,7 @@ class UnconnectedResultsPage extends React.PureComponent {
 
     const controlBarStyles = css({
       display: 'flex',
+      justifyContent: 'space-between',
       marginTop: '10px',
       marginBottom: '10px'
     });
@@ -67,11 +68,6 @@ class UnconnectedResultsPage extends React.PureComponent {
 
     const loadedStyles = css({
       marginRight: `${labelMarginPx * 2}px`
-    });
-
-    // TODO This is not working and I'm not sure why.
-    const filterStyles = css({
-      alignSelf: 'flex-end'
     });
 
     const repos = _(cachedEntry.repos)
@@ -90,7 +86,7 @@ class UnconnectedResultsPage extends React.PureComponent {
     return <div {...rootStyles}>
       <div {...controlBarStyles}>
         <span {...loadedStyles}>Loaded {_.size(cachedEntry.repos)} of {cachedEntry.totalCount} repos.</span>
-        <div {...filterStyles}>
+        <div>
           <span {...labelStyles}>Filter repos:</span>
           <input type="text" 
             onChange={this.props.setRepoFilter} 
