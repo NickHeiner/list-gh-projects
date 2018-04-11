@@ -67,6 +67,8 @@ The API implements pagination with an opaque cursor. When the client requests a 
 
 My ideal API would be a stream, perhaps delivered over a websocket. The client would request a range of the stream, and could render the results one by one as they're available from the server. If the user changes the scroll window mid-stream, the client could use the websocket to request a different range. Responses that arrived for the original range would be saved client-side for later.
 
+Additionally, the GraphQL structure means that some data is repeated. For instance, every time an author appears on a commit, that author's entire requested data object is returned. To save bandwidth, the API could normalize by returning an `authors` set and then have the commits just contain references to that set.
+
 ### CSS-in-JS
 I'm still relatively new to CSS-in-JS, but my experience thus far has been overwhelmingly positive. I've been burned before by projects that develop sprawling wastelands of CSS that no engineer feels safe touching. People add new CSS instead of re-using what's there, and dead code persists indefinitely. CSS conventions, like SMACSS, can ameliorate this, but require a fair amount of discipline to maintain. A few key problems with native CSS include:
 
