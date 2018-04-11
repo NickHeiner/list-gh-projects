@@ -16,8 +16,6 @@ const BareList = ({children}) => {
   return <ul {...styles}>{children}</ul>;
 };
 
-
-
 class UnconnectedResultsPage extends React.PureComponent {
   getOrgName = () => this.props.match.params.orgName;
 
@@ -51,15 +49,19 @@ class UnconnectedResultsPage extends React.PureComponent {
     if (!cachedEntry) {
       return <p>Loading: {this.getOrgName()}.</p>;
     }
-    // TODO remember to sort the repos list, because we cannot depend on the iteration order.
 
     return <div>
       Loaded {_.size(cachedEntry.repos)} of {cachedEntry.totalCount} repos.
       <BareList>
         {
-          _(cachedEntry.repos).values().map(repo => 
-            <li key={repo.name}><RepoResultItem repo={repo} /></li>
-          ).value()
+          _(cachedEntry.repos)
+            .values()
+            // For perf, we could do this sort in a Redux selector.
+            .sortBy(repo => -repo.stargazers.totalCount)
+            .map(repo => 
+              <li key={repo.name}><RepoResultItem repo={repo} /></li>
+            )
+            .value()
         }
       </BareList>
     </div>;
