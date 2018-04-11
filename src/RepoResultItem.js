@@ -34,6 +34,13 @@ const RepoResultItem = ({repo}) => {
     marginTop: 0,
     marginBottom: 0
   });
+  const tableStyles = css({
+    width: '100%',
+    '& td': {
+      padding: '10px',
+      margin: 0
+    }
+  });
   return <div {...rootStyles}>
     <div {...headerRowStyles}>
       <h2 {...headerStyles}><a href={url}>{name}</a></h2>
@@ -42,7 +49,7 @@ const RepoResultItem = ({repo}) => {
       </p>
     </div>
     <h3 {...commitsHeaderStyles}>Commits</h3>
-    <table>
+    <table {...tableStyles}>
       <tbody>
         {
           defaultBranchRef.target.history.nodes.map(
