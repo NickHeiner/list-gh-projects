@@ -51,7 +51,7 @@ const CommitResultItem = ({commit, isEvenRow}) => {
         : commit.author.name
       }
     </td>
-    <td>
+    <td {...hideForSmallScreensStyles}>
       {moment(commit.author.date).format('MMMM D, YYYY')}
     </td>
   </tr>;
