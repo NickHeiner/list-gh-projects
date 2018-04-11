@@ -4,7 +4,7 @@ import {Provider} from 'react-redux';
 import reducer from './reducer';
 import thunk from 'redux-thunk';
 import _ from 'lodash';
-import { REQUEST_STATUS } from '../Constants';
+import {REQUEST_STATUS} from '../Constants';
 
 const initialState = {
   requestStatuses: {

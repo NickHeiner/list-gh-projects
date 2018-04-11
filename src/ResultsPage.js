@@ -2,7 +2,7 @@ import React from 'react';
 import {withRouter} from 'react-router-dom';
 import {css} from 'glamor';
 import RepoResultItem from './RepoResultItem';
-import {REQUEST_STATUS} from './Constants';
+import {REQUEST_STATUS, REPO_ROW_HEIGHT} from './Constants';
 import {connect} from 'react-redux';
 import {startRequestGroup, setRepoFilter} from './redux/actions';
 import {bindActionCreators} from 'redux';
@@ -96,12 +96,17 @@ class UnconnectedResultsPage extends React.PureComponent {
       </div>
       <BareList>
         <AutoSizer>
-          {({ height, width }) => (
+          {({height, width}) => (
             <List
               rowCount={repos.length}
               height={height}
-              rowHeight={285}
-              rowRenderer={({ index, key, style }) => <li key={key} style={style}><RepoResultItem repo={repos[index]} /></li>}
+              rowHeight={REPO_ROW_HEIGHT}
+              // TODO It's considered poor form to define an inline function in render(), because it dooms
+              // us to always re-rendering the component, because the props will always be different, 
+              // because two separately created functions will never be evaluated as equal.
+              rowRenderer={
+                ({index, key, style}) => <li key={key} style={style}><RepoResultItem repo={repos[index]} /></li>
+              }
               width={width}
             />
           )}

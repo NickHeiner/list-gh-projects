@@ -2,6 +2,7 @@ import React from 'react';
 import {css} from 'glamor';
 import FormattedNumber from './FormattedNumber';
 import CommitResultItem from './CommitResultItem';
+import {REPO_ROW_HEIGHT} from './Constants';
 
 const RepoResultItem = ({repo}) => {
   const {name, forks, stargazers, defaultBranchRef, url} = repo;
@@ -16,7 +17,8 @@ const RepoResultItem = ({repo}) => {
       ':hover': {
         textDecoration: 'underline'
       }
-    }
+    },
+    minHeight: `${REPO_ROW_HEIGHT}px`
   });
   const headerRowStyles = css({
     display: 'flex',
@@ -49,8 +51,8 @@ const RepoResultItem = ({repo}) => {
       </p>
     </div>
     <h3 {...commitsHeaderStyles}>Commits</h3>
-    {defaultBranchRef ? 
-      <table {...tableStyles}>
+    {defaultBranchRef 
+      ? <table {...tableStyles}>
         <tbody>
           {
             defaultBranchRef.target.history.nodes.map(

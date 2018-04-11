@@ -5,3 +5,5 @@ export const REQUEST_STATUS = {
   FAILED: 'FAILED',
   SUCCEEDED: 'SUCCEEDED'
 };
+
+export const REPO_ROW_HEIGHT = 285;

@@ -109,6 +109,12 @@ create-react-app adds uses a plugin to cache static assets with a service worker
 
 Additionally, if I had used the service worker, I could have kept images from GitHub avatars working offline as well.
 
+### Google Analytics
+The event tracking is not actually firing network requests. I'm not sure why this is.
+
+### React Virtualized Row Sizing
+I use react-virtualized to avoid rendering the entire data set into the DOM at once. This keeps the UI smooth, even as the user is typing to filter by repo name. To make this work, I had to give all row elements a fixed height. There are more sophisticated approaches that handle dynamic row heights.
+
 ## Things I'd Add If I Had More Time
 ### Tests
 If I had time to add tests, I'd favor Selenium-driven browser integration tests. Ideally, they would run using a tool like SauceLabs or BrowserStack to test multiple browser / OS combos. 
