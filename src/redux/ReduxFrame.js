@@ -19,7 +19,10 @@ const localStorageKey = 'githubResponseCache';
 
 const getJsonFromLocalStorage = key => {
   try {
-    return JSON.parse(window.localStorage.getItem(key)) || initialState;
+    return {
+      ...JSON.parse(window.localStorage.getItem(key)),
+      ...initialState
+    };
   } catch (e) {
     if (e.name !== 'SyntaxError') {
       throw e;

@@ -9,7 +9,7 @@ const ColoredText = ({children, color}) => <span {...css({color})}>{children}</s
 const CommitResultItem = ({commit, isEvenRow}) => {
   const rowStyle = css({
     backgroundColor: isEvenRow ? '#eae8e8' : undefined
-  })
+  });
   const imageSideLength = '20px';
   const imageCellStyles = css({
     display: 'flex',
