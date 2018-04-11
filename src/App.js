@@ -56,30 +56,36 @@ class RouterlessHeader extends React.PureComponent {
 const Header = withRouter(RouterlessHeader);
 
 const App = () => {
-  const styles = css({
+  const rootStyles = css({
+    display: 'flex',
+    flexDirection: 'column', 
+    height: '100%'
+  });
+
+  const wrapperStyles = css({
     width: '90vw',
     marginLeft: 'auto',
     marginRight: 'auto',
     [SMALL_SIZE_MEDIA_QUERY]: {
       width: '95vw'
     },
-    height: '100%'
+    flex: 1
   });
 
   const headerStyles = css({
     background: '#24292e'
   });
 
-  return <React.Fragment>
+  return <div {...rootStyles}>
     <div {...headerStyles}>
-      <div {...styles} >
+      <div {...wrapperStyles} >
         <Header />
       </div>
     </div>
-    <div {...styles}>
+    <div {...wrapperStyles}>
       <ResultsPage />
     </div>
-  </React.Fragment>;
+  </div>;
 };
 
 const AppFrame = () => <ReduxFrame>
