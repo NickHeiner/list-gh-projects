@@ -1,7 +1,10 @@
 import _ from 'lodash';
 
-const getStringMatch = (query, string) => {
+const getStringMatch = (rawQuery, rawString) => {
+  const query = rawQuery.toLowerCase();
+  const string = rawString.toLowerCase();
   const matchIndexes = [];
+
   for (let queryIndex = 0; queryIndex < query.length; queryIndex++) {
     const searchLowerBound = _.last(matchIndexes) + 1 || 0;
     const char = query[queryIndex];

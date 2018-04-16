@@ -17,6 +17,10 @@ it('finds an exact match', () => {
   expect(getStringMatch('exact', 'exact')).toEqual(_.range('exact'.length));
 });
 
+it('is case-insensitive', () => {
+  expect(getStringMatch('case', 'CASE')).toEqual(_.range('case'.length));
+});
+
 it('finds a match with other interspersed characters', () => {
   expect(getStringMatch('ab', 'a-b-')).toEqual([0, 2]);
 });
