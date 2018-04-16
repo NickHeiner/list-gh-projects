@@ -8,6 +8,7 @@ import {startRequestGroup, setRepoFilter} from './redux/actions';
 import {bindActionCreators} from 'redux';
 import _ from 'lodash';
 import {AutoSizer, List} from 'react-virtualized';
+import getStringMatch from './GetStringMatch';
 
 const BareList = ({children}) => {
   const styles = css({
@@ -55,11 +56,12 @@ class UnconnectedResultsPage extends React.PureComponent {
         marginRight: `${labelMarginPx * 2}px`
       });
   
-      const repos = _(cachedEntry.repos)
+      const matchedRepos = _(cachedEntry.repos)
         .values()
         // For perf, we could do this sort in a Redux selector.
         .sortBy(repo => -repo.stargazers.totalCount)
-        .filter(repo => !this.props.repoFilter || repo.name.includes(this.props.repoFilter))
+        .map(repo => ({repo, match: getStringMatch(this.props.repoFilter, repo.name)}))
+        .filter(repo => !this.props.repoFilter || repo.match)
         .value();
   
       const rootStyles = css({
@@ -67,7 +69,7 @@ class UnconnectedResultsPage extends React.PureComponent {
         flexDirection: 'column',
         height: '100%'
       });
-  
+
       return <div {...rootStyles}>
         <div {...controlBarStyles}>
           <span {...loadedStyles}>Loaded {_.size(cachedEntry.repos)} of {cachedEntry.totalCount} repos.</span>
@@ -83,14 +85,15 @@ class UnconnectedResultsPage extends React.PureComponent {
           <AutoSizer>
             {({height, width}) => (
               <List
-                rowCount={repos.length}
+                rowCount={matchedRepos.length}
                 height={height}
                 rowHeight={REPO_ROW_HEIGHT}
                 // TODO It's considered poor form to define an inline function in render(), because it dooms
                 // us to always re-rendering the component, because the props will always be different, 
                 // because two separately created functions will never be evaluated as equal.
                 rowRenderer={
-                  ({index, key, style}) => <li key={key} style={style}><RepoResultItem repo={repos[index]} /></li>
+                  ({index, key, style}) => 
+                    <li key={key} style={style}><RepoResultItem matchedRepo={matchedRepos[index]} /></li>
                 }
                 width={width}
               />

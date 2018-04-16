@@ -3,9 +3,10 @@ import {css} from 'glamor';
 import FormattedNumber from './FormattedNumber';
 import CommitResultItem from './CommitResultItem';
 import {REPO_ROW_HEIGHT} from './Constants';
+import HighlightMatches from './HighlightMatches';
 
-const RepoResultItem = ({repo}) => {
-  const {name, forks, stargazers, defaultBranchRef, url} = repo;
+const RepoResultItem = ({matchedRepo, index}) => {
+  const {repo: {name, forks, stargazers, defaultBranchRef, url}, match} = matchedRepo;
 
   const rootStyles = css({
     border: '1px rgb(234, 236, 239) solid',
@@ -45,7 +46,7 @@ const RepoResultItem = ({repo}) => {
   });
   return <div {...rootStyles}>
     <div {...headerRowStyles}>
-      <h2 {...headerStyles}><a href={url}>{name}</a></h2>
+      <h2 {...headerStyles}><a href={url}><HighlightMatches toHighlight={name} matches={match} /></a></h2>
       <p {...subtitleStyles}>
         (<FormattedNumber val={forks.totalCount} /> forks; <FormattedNumber val={stargazers.totalCount} /> stars)
       </p>
