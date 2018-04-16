@@ -10,10 +10,10 @@ const CommitResultItem = ({commit, isEvenRow}) => {
     backgroundColor: isEvenRow ? '#eae8e8' : undefined
   });
   const hashCellStyles = css({
-    width: '1rem'
+    width: '6rem'
   });
   const additionsDeletionsCellStyles = css({
-    width: '5rem'
+    width: '6rem'
   });
   const headlineCellStyles = css({
     width: '34rem'
