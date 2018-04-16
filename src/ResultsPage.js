@@ -75,12 +75,12 @@ class UnconnectedResultsPage extends React.PureComponent {
               placeholder={_(cachedEntry.repos).keys().first()} />
           </div>
         </div>
-        <OrgSummary org={cachedEntry} />
         <BareList>
+          
           <AutoSizer>
             {({height, width}) => (
               <List
-                rowCount={matchedRepos.length}
+                rowCount={matchedRepos.length + 1}
                 height={height}
                 rowHeight={REPO_ROW_HEIGHT}
                 // TODO It's considered poor form to define an inline function in render(), because it dooms
@@ -88,7 +88,9 @@ class UnconnectedResultsPage extends React.PureComponent {
                 // because two separately created functions will never be evaluated as equal.
                 rowRenderer={
                   ({index, key, style}) => 
-                    <li key={key} style={style}><RepoResultItem matchedRepo={matchedRepos[index]} /></li>
+                    index
+                      ? <li key={key} style={style}><RepoResultItem matchedRepo={matchedRepos[index - 1]} /></li>
+                      : <OrgSummary org={cachedEntry} />
                 }
                 width={width}
               />
