@@ -3,7 +3,7 @@ import _ from 'lodash';
 import FormattedNumber from './FormattedNumber';
 import moment from 'moment';
 import DiffAdditionsDeletions from './DiffAdditionsDeletions';
-import BareList from './BareList';
+import Author from './Author';
 
 const sumBy = (obj, iteratee) => _(obj).map(iteratee).sum();
 const countTopCommittersToShow = 5;
@@ -52,17 +52,29 @@ const OrgSummary = ({org, orgName}) => {
       </tbody>
     </table>
     <h4>Most Active Contributors</h4>
-    <BareList>
-      {
-        _(allCommits)
-          .groupBy(({author}) => author.name)
-          .toPairs()
-          .sortBy(([name, commits]) => -commits.length)
-          .take(countTopCommittersToShow)
-          .map(([name, commits]) => <li key={name}>{name} – {commits.length}</li>)
-          .value()
-      }
-    </BareList>
+    <table>
+      <thead>
+        <tr>
+          <th>Author</th><th>Recent Commits</th>
+        </tr>
+      </thead>
+      <tbody>
+        {
+          _(allCommits)
+            .groupBy(({author}) => author.name)
+            .toPairs()
+            .sortBy(([name, commits]) => -commits.length)
+            .take(countTopCommittersToShow)
+            .map(([name, commits]) => {
+              const {author} = _.find(allCommits, ({author}) => author.name === name);
+              return <tr key={name}>
+                <td><Author author={author} /></td><td>{commits.length}</td>
+              </tr>;
+            })
+            .value()
+        }
+      </tbody>
+    </table>
   </div>;
 };
 

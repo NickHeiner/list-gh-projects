@@ -3,21 +3,15 @@ import {css} from 'glamor';
 import {SMALL_SIZE_MEDIA_QUERY} from './Constants';
 import moment from 'moment';
 import DiffAdditionsDeletions from './DiffAdditionsDeletions';
+import Author from './Author';
 
 const CommitResultItem = ({commit, isEvenRow}) => {
   const rowStyle = css({
     backgroundColor: isEvenRow ? '#eae8e8' : undefined
   });
-  const imageSideLength = '20px';
   const imageCellStyles = css({
     display: 'flex',
     alignItems: 'center'
-  });
-  const imageStyles = css({
-    width: imageSideLength,
-    height: imageSideLength,
-    borderRadius: '2px',
-    marginRight: '5px'
   });
   const hideForSmallScreensStyles = css({
     [SMALL_SIZE_MEDIA_QUERY]: {
@@ -42,11 +36,7 @@ const CommitResultItem = ({commit, isEvenRow}) => {
           time the window resizes. That would have its own performance implications.
           For now, I think this is fine.
       */}
-      <img src={commit.author.avatarUrl} alt="" {...imageStyles} />
-      {commit.author.user 
-        ? <a href={commit.author.user.url}>{commit.author.name}</a>
-        : commit.author.name
-      }
+      <Author author={commit.author} />
     </td>
     <td {...hideForSmallScreensStyles}>
       {moment(commit.author.date).fromNow()}
