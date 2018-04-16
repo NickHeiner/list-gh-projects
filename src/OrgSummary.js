@@ -3,8 +3,10 @@ import _ from 'lodash';
 import FormattedNumber from './FormattedNumber';
 import moment from 'moment';
 import DiffAdditionsDeletions from './DiffAdditionsDeletions';
+import BareList from './BareList';
 
 const sumBy = (obj, iteratee) => _(obj).map(iteratee).sum();
+const countTopCommittersToShow = 5;
 
 const OrgSummary = ({org, orgName}) => {
   const oneWeekAgo = moment().subtract(1, 'week');
@@ -49,6 +51,18 @@ const OrgSummary = ({org, orgName}) => {
         </tr>
       </tbody>
     </table>
+    <h4>Most Active Contributors</h4>
+    <BareList>
+      {
+        _(allCommits)
+          .groupBy(({author}) => author.name)
+          .toPairs()
+          .sortBy(([name, commits]) => -commits.length)
+          .take(countTopCommittersToShow)
+          .map(([name, commits]) => <li key={name}>{name} – {commits.length}</li>)
+          .value()
+      }
+    </BareList>
   </div>;
 };
 
