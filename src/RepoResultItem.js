@@ -27,15 +27,12 @@ const RepoResultItem = ({matchedRepo, index}) => {
   });
   const headerStyles = css({
     marginTop: 0,
+    marginBottom: 0,
     marginRight: '10px'
   });
   const subtitleStyles = css({
     color: '#586069',
     fontSize: '.85rem'
-  });
-  const commitsHeaderStyles = css({
-    marginTop: 0,
-    marginBottom: 0
   });
   const tableStyles = css({
     width: '100%',
@@ -56,7 +53,6 @@ const RepoResultItem = ({matchedRepo, index}) => {
         </FormattedNumber> stars)
       </p>
     </div>
-    <h3 {...commitsHeaderStyles}>Commits</h3>
     {defaultBranchRef 
       ? <table {...tableStyles}>
         <tbody>
