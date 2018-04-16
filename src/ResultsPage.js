@@ -75,7 +75,7 @@ class UnconnectedResultsPage extends React.PureComponent {
               placeholder={_(cachedEntry.repos).keys().first()} />
           </div>
         </div>
-        <OrgSummary org={cachedEntry} orgName={this.getOrgName()} />
+        <OrgSummary org={cachedEntry} />
         <BareList>
           <AutoSizer>
             {({height, width}) => (
