@@ -25,8 +25,9 @@ const OrgSummary = ({org}) => {
       marginTop: 0,
       marginBottom: 0
     },
-    '& td': {
-      padding: 0
+    '& td:first-child': {
+      padding: 0,
+      paddingRight: '5px'
     }
   });
 
@@ -53,7 +54,7 @@ const OrgSummary = ({org}) => {
         </table>
       </div>
       <div>
-        <h3>Recent Activity</h3>
+        <h3>Activity In The Past Week</h3>
         <div {...displayFlex}>
           <table>
             <tbody>
@@ -78,7 +79,7 @@ const OrgSummary = ({org}) => {
         </div>
       </div>
       <div>         
-        <h3>Authors With Recent Commits</h3>
+        <h3>Authors With Commits In The Past Week</h3>
         <table>
           <tbody>
             {
