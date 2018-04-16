@@ -19,6 +19,8 @@ class Header extends React.PureComponent {
       }
     });
     const headerStyles = css({
+      marginTop: '.23em',
+      marginBottom: '.23em',
       color: 'rgba(255,255,255,0.75)',
       marginRight: '10px'
     });
