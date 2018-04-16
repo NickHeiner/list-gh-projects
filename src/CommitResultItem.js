@@ -9,9 +9,21 @@ const CommitResultItem = ({commit, isEvenRow}) => {
   const rowStyle = css({
     backgroundColor: isEvenRow ? '#eae8e8' : undefined
   });
+  const hashCellStyles = css({
+    width: '1rem'
+  });
+  const additionsDeletionsCellStyles = css({
+    width: '5rem'
+  });
+  const headlineCellStyles = css({
+    width: '34rem'
+  });
   const imageCellStyles = css({
     display: 'flex',
     alignItems: 'center'
+  });
+  const dateCellStyles = css({
+    width: '7rem'
   });
   const hideForSmallScreensStyles = css({
     [SMALL_SIZE_MEDIA_QUERY]: {
@@ -19,13 +31,13 @@ const CommitResultItem = ({commit, isEvenRow}) => {
     }
   });
   return <tr {...rowStyle}>
-    <td>
+    <td {...hashCellStyles}>
       <a href={commit.url}>{commit.abbreviatedOid}</a>&nbsp;
     </td>
-    <td {...hideForSmallScreensStyles}>
+    <td {...hideForSmallScreensStyles} {...additionsDeletionsCellStyles}>
       <DiffAdditionsDeletions additions={commit.additions} deletions={commit.deletions} />
     </td>
-    <td>
+    <td {...headlineCellStyles}>
       {commit.messageHeadline}
     </td>
     <td {...imageCellStyles} {...hideForSmallScreensStyles}>
@@ -38,7 +50,7 @@ const CommitResultItem = ({commit, isEvenRow}) => {
       */}
       <Author author={commit.author} />
     </td>
-    <td {...hideForSmallScreensStyles}>
+    <td {...hideForSmallScreensStyles} {...dateCellStyles}>
       {moment(commit.author.date).fromNow()}
     </td>
   </tr>;
