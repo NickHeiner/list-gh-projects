@@ -9,6 +9,7 @@ import {bindActionCreators} from 'redux';
 import _ from 'lodash';
 import {AutoSizer, List} from 'react-virtualized';
 import getStringMatch from './GetStringMatch';
+import OrgSummary from './OrgSummary';
 
 const BareList = ({children}) => {
   const styles = css({
@@ -83,6 +84,7 @@ class UnconnectedResultsPage extends React.PureComponent {
               placeholder={_(cachedEntry.repos).keys().first()} />
           </div>
         </div>
+        <OrgSummary org={cachedEntry} orgName={this.getOrgName()} />
         <BareList>
           <AutoSizer>
             {({height, width}) => (

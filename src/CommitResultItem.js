@@ -1,10 +1,8 @@
 import React from 'react';
 import {css} from 'glamor';
 import {SMALL_SIZE_MEDIA_QUERY} from './Constants';
-import FormattedNumber from './FormattedNumber';
 import moment from 'moment';
-
-const ColoredText = ({children, color}) => <span {...css({color})}>{children}</span>;
+import DiffAdditionsDeletions from './DiffAdditionsDeletions';
 
 const CommitResultItem = ({commit, isEvenRow}) => {
   const rowStyle = css({
@@ -31,8 +29,7 @@ const CommitResultItem = ({commit, isEvenRow}) => {
       <a href={commit.url}>{commit.abbreviatedOid}</a>&nbsp;
     </td>
     <td {...hideForSmallScreensStyles}>
-      (<ColoredText color="#28a745">+<FormattedNumber val={commit.additions} /></ColoredText>
-      /<ColoredText color="#cb2431">-<FormattedNumber val={commit.deletions} /></ColoredText>)&nbsp;
+      <DiffAdditionsDeletions additions={commit.additions} deletions={commit.deletions} />
     </td>
     <td>
       {commit.messageHeadline}

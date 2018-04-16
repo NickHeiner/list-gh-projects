@@ -48,7 +48,12 @@ const RepoResultItem = ({matchedRepo, index}) => {
     <div {...headerRowStyles}>
       <h2 {...headerStyles}><a href={url}><HighlightMatches toHighlight={name} matches={match} /></a></h2>
       <p {...subtitleStyles}>
-        (<FormattedNumber val={forks.totalCount} /> forks; <FormattedNumber val={stargazers.totalCount} /> stars)
+        (<FormattedNumber>
+          {forks.totalCount}
+        </FormattedNumber> forks;{' '} 
+        <FormattedNumber>
+          {stargazers.totalCount}
+        </FormattedNumber> stars)
       </p>
     </div>
     <h3 {...commitsHeaderStyles}>Commits</h3>
