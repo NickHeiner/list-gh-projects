@@ -35,11 +35,75 @@ class UnconnectedResultsPage extends React.PureComponent {
       return null;
     }
 
+    const cachedEntry = this.props.response;
+
+    if (cachedEntry) {
+      const controlBarStyles = css({
+        display: 'flex',
+        justifyContent: 'space-between',
+        marginTop: '10px',
+        marginBottom: '10px'
+      });
+  
+      const labelMarginPx = 10;
+  
+      const labelStyles = css({
+        marginRight: `${labelMarginPx}px`
+      });
+  
+      const loadedStyles = css({
+        marginRight: `${labelMarginPx * 2}px`
+      });
+  
+      const repos = _(cachedEntry.repos)
+        .values()
+        // For perf, we could do this sort in a Redux selector.
+        .sortBy(repo => -repo.stargazers.totalCount)
+        .filter(repo => !this.props.repoFilter || repo.name.includes(this.props.repoFilter))
+        .value();
+  
+      const rootStyles = css({
+        display: 'flex', 
+        flexDirection: 'column',
+        height: '100%'
+      });
+  
+      return <div {...rootStyles}>
+        <div {...controlBarStyles}>
+          <span {...loadedStyles}>Loaded {_.size(cachedEntry.repos)} of {cachedEntry.totalCount} repos.</span>
+          <div>
+            <span {...labelStyles}>Filter repos:</span>
+            <input type="text" 
+              onChange={this.props.setRepoFilter} 
+              value={this.props.repoFilter} 
+              placeholder={_(cachedEntry.repos).keys().first()} />
+          </div>
+        </div>
+        <BareList>
+          <AutoSizer>
+            {({height, width}) => (
+              <List
+                rowCount={repos.length}
+                height={height}
+                rowHeight={REPO_ROW_HEIGHT}
+                // TODO It's considered poor form to define an inline function in render(), because it dooms
+                // us to always re-rendering the component, because the props will always be different, 
+                // because two separately created functions will never be evaluated as equal.
+                rowRenderer={
+                  ({index, key, style}) => <li key={key} style={style}><RepoResultItem repo={repos[index]} /></li>
+                }
+                width={width}
+              />
+            )}
+          </AutoSizer>
+        </BareList>
+      </div>;
+    }
+
     if (this.props.requestStatus === REQUEST_STATUS.FAILED) {
       return <p>Request for {this.getOrgName()} failed.</p>;
     }
 
-    const cachedEntry = this.props.response;
     if (cachedEntry === null) {
       // It could be that the organization is not publicly visible,
       // in which case GH would not even confirm its existence. In that case, 
@@ -49,70 +113,7 @@ class UnconnectedResultsPage extends React.PureComponent {
       return <p>Organization {this.getOrgName()} does not exist.</p>;
     }
 
-    if (!cachedEntry) {
-      return <p>Loading: {this.getOrgName()}.</p>;
-    }
-
-    const controlBarStyles = css({
-      display: 'flex',
-      justifyContent: 'space-between',
-      marginTop: '10px',
-      marginBottom: '10px'
-    });
-
-    const labelMarginPx = 10;
-
-    const labelStyles = css({
-      marginRight: `${labelMarginPx}px`
-    });
-
-    const loadedStyles = css({
-      marginRight: `${labelMarginPx * 2}px`
-    });
-
-    const repos = _(cachedEntry.repos)
-      .values()
-      // For perf, we could do this sort in a Redux selector.
-      .sortBy(repo => -repo.stargazers.totalCount)
-      .filter(repo => !this.props.repoFilter || repo.name.includes(this.props.repoFilter))
-      .value();
-
-    const rootStyles = css({
-      display: 'flex', 
-      flexDirection: 'column',
-      height: '100%'
-    });
-
-    return <div {...rootStyles}>
-      <div {...controlBarStyles}>
-        <span {...loadedStyles}>Loaded {_.size(cachedEntry.repos)} of {cachedEntry.totalCount} repos.</span>
-        <div>
-          <span {...labelStyles}>Filter repos:</span>
-          <input type="text" 
-            onChange={this.props.setRepoFilter} 
-            value={this.props.repoFilter} 
-            placeholder={_(cachedEntry.repos).keys().first()} />
-        </div>
-      </div>
-      <BareList>
-        <AutoSizer>
-          {({height, width}) => (
-            <List
-              rowCount={repos.length}
-              height={height}
-              rowHeight={REPO_ROW_HEIGHT}
-              // TODO It's considered poor form to define an inline function in render(), because it dooms
-              // us to always re-rendering the component, because the props will always be different, 
-              // because two separately created functions will never be evaluated as equal.
-              rowRenderer={
-                ({index, key, style}) => <li key={key} style={style}><RepoResultItem repo={repos[index]} /></li>
-              }
-              width={width}
-            />
-          )}
-        </AutoSizer>
-      </BareList>
-    </div>;
+    return <p>Loading: {this.getOrgName()}.</p>;
   }
 }
 
