@@ -20,8 +20,10 @@ const BareList = ({children}) => {
   return <ul {...styles}>{children}</ul>;
 };
 
+const normalizeOrgName = _.toLower;
+
 class UnconnectedResultsPage extends React.PureComponent {
-  getOrgName = () => this.props.match.params.orgName;
+  getOrgName = () => normalizeOrgName(this.props.match.params.orgName);
 
   componentDidMount() {
     this.props.startRequestGroup(this.getOrgName());
@@ -123,8 +125,8 @@ class UnconnectedResultsPage extends React.PureComponent {
 const ResultsPage = connect(
   (state, ownProps) => ({
     repoFilter: state.repoFilter,
-    requestStatus: state.requestStatuses[ownProps.match.params.orgName],
-    response: state.responses[ownProps.match.params.orgName]
+    requestStatus: state.requestStatuses[normalizeOrgName(ownProps.match.params.orgName)],
+    response: state.responses[normalizeOrgName(ownProps.match.params.orgName)]
   }),
   dispatch => bindActionCreators({
     startRequestGroup,

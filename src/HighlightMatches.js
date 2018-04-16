@@ -11,7 +11,7 @@ const HighlightMatches = ({matches, toHighlight}) => {
     {
       _.map(toHighlight, (char, index) => {
         const styles = matches.includes(index) ? highlightStyles : {};
-        return <span {...styles}>{char}</span>;
+        return <span {...styles} key={`${char}-${index}`}>{char}</span>;
       })
     }
   </React.Fragment>;
