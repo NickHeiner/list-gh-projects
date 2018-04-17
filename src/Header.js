@@ -29,12 +29,16 @@ class Header extends React.PureComponent {
       height: inputHeight,
       fontSize: inputHeight,
       backgroundColor: '#404448',
-      borderColor: '#292e34',
-      color: '#7d8082',
+      border: 0,
+      padding: '2px',
+      color: 'rgba(255,255,255,0.75)',
       [SMALL_SIZE_MEDIA_QUERY]: {
         marginBottom: '10px'
       },
-      flex: 1
+      flex: 1,
+      '::placeholder': {
+        color: '#7d8082'
+      }
     });
     return <div {...styles}>
       <h1 id="header" {...headerStyles}>View GH projects by org:</h1>
