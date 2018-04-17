@@ -96,10 +96,6 @@ class UnconnectedResultsPage extends React.PureComponent {
         height: '100%'
       });
 
-      const listElemStyles = css({
-        // marginBottom: '10px'
-      });
-
       return <div {...rootStyles}>
         <div {...controlBarStyles}>
           <div>
@@ -125,10 +121,10 @@ class UnconnectedResultsPage extends React.PureComponent {
                 rowRenderer={
                   ({index, key, style}) => 
                     index
-                      ? <li key={key} style={style} {...listElemStyles}>
+                      ? <li key={key} style={style}>
                         <RepoResultItem matchedRepo={matchedRepos[index - 1]} />
                       </li>
-                      : <div style={style} {...listElemStyles}><OrgSummary org={cachedEntry} /></div>
+                      : <div style={style}><OrgSummary org={cachedEntry} /></div>
                 }
                 width={width}
               />
@@ -142,16 +138,21 @@ class UnconnectedResultsPage extends React.PureComponent {
       return <p>Request for {this.getOrgName()} failed.</p>;
     }
 
+    const basicMessageStyles = css({
+      textAlign: 'center',
+      fontSize: '1.5rem'
+    });
+
     if (cachedEntry && !cachedEntry.repos) {
       // It could be that the organization is not publicly visible,
       // in which case GH would not even confirm its existence. In that case, 
       // we would want to make this error message a bit more precise. Can
       // organizations be hidden from the public? I'm not sure, but it doesn't
       // seem like a great use of time to find out. :)
-      return <p>Organization {this.getOrgName()} does not exist.</p>;
+      return <p {...basicMessageStyles}>Organization <strong>{this.getOrgName()}</strong> does not exist.</p>;
     }
 
-    return <p>Loading: {this.getOrgName()}.</p>;
+    return <p {...basicMessageStyles}>Loading <strong>{this.getOrgName()}</strong></p>;
   }
 }
 

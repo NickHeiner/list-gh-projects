@@ -69,8 +69,8 @@ export const startRequestGroup = orgName => async (dispatch, getState) => {
       return;
     }
 
-    const repos = _.get(response.data.data.organization, ['repositories', 'nodes'], null);
-    const totalCount = _.get(response.data.data.organization, ['repositories', 'totalCount']);
+    const repos = _.get(response.data.data, ['organization', 'repositories', 'nodes'], null);
+    const totalCount = _.get(response.data.data, ['organization', 'repositories', 'totalCount']);
     
     dispatch({
       type: names.UPDATE_ORG_REPOS,
