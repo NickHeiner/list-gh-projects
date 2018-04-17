@@ -6,6 +6,9 @@ import {REPO_ROW_HEIGHT} from './Constants';
 import HighlightMatches from './HighlightMatches';
 import Star from 'material-ui/svg-icons/toggle/star';
 import CallSplit from 'material-ui/svg-icons/communication/call-split';
+import _ from 'lodash';
+
+const countCommitsToShow = 5;
 
 const RepoResultItem = ({matchedRepo, index}) => {
   const {repo: {name, forks, stargazers, defaultBranchRef, url}, match} = matchedRepo;
@@ -81,7 +84,7 @@ const RepoResultItem = ({matchedRepo, index}) => {
       ? <table {...tableStyles}>
         <tbody>
           {
-            defaultBranchRef.target.history.nodes.map(
+            _.take(defaultBranchRef.target.history.nodes, countCommitsToShow).map(
               (commit, index) => <CommitResultItem key={commit.id} commit={commit} isEvenRow={Boolean(index % 2)} />
             )
           }

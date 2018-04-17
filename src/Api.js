@@ -25,7 +25,7 @@ const makeGithubApiRequest = (orgName, cursor = null) => axios.post('https://api
                   defaultBranchRef {
                     target {
                       ... on Commit {
-                        history(first: 5) {
+                        history(first: 10) {
                           nodes {
                             url
                             abbreviatedOid
