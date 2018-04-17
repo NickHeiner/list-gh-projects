@@ -12,7 +12,7 @@ const countTopCommittersToShow = 5;
 const OrgSummary = ({org}) => {
   const oneWeekAgo = moment().subtract(1, 'week');
   const allCommits = _(org.repos)
-    .flatMap(repo => repo.defaultBranchRef.target.history.nodes)
+    .flatMap(repo => _.get(repo, ['defaultBranchRef', 'target', 'history', 'nodes'], []))
     .filter(({author}) => moment(author.date).isAfter(oneWeekAgo))
     .value();
 
