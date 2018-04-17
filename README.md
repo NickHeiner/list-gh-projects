@@ -167,6 +167,9 @@ The "filter repo" input is located above the org summary. I did this so the org 
 
 Additionally, it may be nice to clear the "filter repos" input value when the user switches to a new org. If you view Facebook and filter for "react", for instance, and then view Rails, you'd still have the "react" filter in place. You may not realize this, and then be confused when Rails does not appear to have very many repos. Or maybe this is desirable, because you're moving between orgs and looking for the same thing. 
 
+### Stars And Forks Indicator
+The stars and forks indicator currently sits directly to the right of the repo title. It may be better to pull it all the way to the right of the parent container, so it's in a consistent position between repo entries. As it is, the indicator jumps around between entries, which makes it harder to quickly scan the page.
+
 ### Org Summary Banded Rows
 In the org summary, it may improve readability to use banded rows for the statistics tables. I chose not to, because I thought that it was readable as-is, and adding banding would just add visual weight to the page. But users may feel differently.
 
