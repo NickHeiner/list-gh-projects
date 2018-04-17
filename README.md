@@ -118,9 +118,9 @@ Also, by combining all details necessary to render a component within the compon
 
 ## Corners I Cut
 ### Visual Design
-As noted above, I'm not a visual designer. I stole the color scheme from GitHub. 
+As noted above, I'm not a visual designer. I stole the color scheme from GitHub. I took a few components from Google Material UI.
 
-There are a few small visual bugs. For instance, the main search box has an unsightly black border on the left and top sides.
+There are a few small visual bugs. For instance, it may not be desirable that the scroll bar overlaps with the content of the results list.  
 
 ### Responsive Design
 A proper responsive design starts with the smallest supported screen size, and adds content progressively. In contrast, I designed for my 15" Macbook screen, and put in a few patches to make it marginally less appalling on mobile.
