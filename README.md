@@ -137,6 +137,8 @@ Additionally, if I had used the service worker, I could have kept images from Gi
 
 To try this out, visit the app, and search for a few orgs. Once they're done loading, disconnect from the internet (Chrome's dev tools will let you do this for just a single tab) and see that the app still functions for the previously-loaded data!
 
+Another problem: the API response cache sometimes needs to be invalidated when a new version of the app is deployed, and the client is now expecting the cached data to have a different shape. The client currently does not do this.
+
 ### Request Robustness
 Loading all the repos for an org takes multiple requests. If any of those requests fail, the entire loading process stops. Sometimes, the GitHub API will randomly fail. The client does not handle this robustly by retrying, potentially with exponential back-off.
 
