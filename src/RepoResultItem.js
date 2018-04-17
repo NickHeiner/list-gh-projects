@@ -4,6 +4,8 @@ import FormattedNumber from './FormattedNumber';
 import CommitResultItem from './CommitResultItem';
 import {REPO_ROW_HEIGHT} from './Constants';
 import HighlightMatches from './HighlightMatches';
+import Star from 'material-ui/svg-icons/toggle/star';
+import CallSplit from 'material-ui/svg-icons/communication/call-split';
 
 const RepoResultItem = ({matchedRepo, index}) => {
   const {repo: {name, forks, stargazers, defaultBranchRef, url}, match} = matchedRepo;
@@ -23,10 +25,22 @@ const RepoResultItem = ({matchedRepo, index}) => {
     marginBottom: 0,
     marginRight: '10px'
   });
+  const subtleTextColorStyles = {
+    color: '#586069'
+  };
   const subtitleStyles = css({
-    color: '#586069',
-    fontSize: '.85rem'
+    ...subtleTextColorStyles,
+    display: 'flex',
+    fontSize: '.9rem'
   });
+  const iconSideLength = '1em';
+  const iconStyles = {
+    ...subtleTextColorStyles,
+    width: iconSideLength,
+    height: iconSideLength,
+    position: 'relative',
+    top: '.125em'
+  };
   const tableStyles = css({
     width: '100%',
     '& td': {
@@ -34,16 +48,33 @@ const RepoResultItem = ({matchedRepo, index}) => {
       margin: 0
     }
   });
+  const firstSubtitleEntryStyles = css({
+    marginRight: '10px'
+  });
   return <div {...rootStyles}>
     <div {...headerRowStyles}>
       <h2 {...headerStyles}><a href={url}><HighlightMatches toHighlight={name} matches={match} /></a></h2>
       <p {...subtitleStyles}>
-        (<FormattedNumber>
-          {forks.totalCount}
-        </FormattedNumber> forks;{' '} 
-        <FormattedNumber>
-          {stargazers.totalCount}
-        </FormattedNumber> stars)
+        <div {...firstSubtitleEntryStyles}>
+          <span aria-hidden={true}>
+            <CallSplit style={iconStyles} />
+          </span>
+          <span aria-label="forks">
+            <FormattedNumber>
+              {forks.totalCount}
+            </FormattedNumber>
+          </span>
+        </div>
+        <div>
+          <span aria-hidden={true}>
+            <Star style={iconStyles} />
+          </span>
+          <span aria-label="stars">
+            <FormattedNumber>
+              {stargazers.totalCount}
+            </FormattedNumber>
+          </span>
+        </div>
       </p>
     </div>
     {defaultBranchRef 

@@ -136,10 +136,13 @@ Additionally, if I had used the service worker, I could have kept images from Gi
 To try this out, visit the app, and search for a few orgs. Once they're done loading, disconnect from the internet (Chrome's dev tools will let you do this for just a single tab) and see that the app still functions for the previously-loaded data!
 
 ### Request Robustness
-Loading all the repos for an org takes multiple requests. If any of those requests fail, the entire loading process stops. Sometimes, the GitHub API will randomly fail. The client does not handle this robustly by retrying, potentially with exponential backoff.
+Loading all the repos for an org takes multiple requests. If any of those requests fail, the entire loading process stops. Sometimes, the GitHub API will randomly fail. The client does not handle this robustly by retrying, potentially with exponential back-off.
 
 ### Loading Indicator Subtlety 
 The org summary view is incomplete while the org repos load. The numbers update as new data is fetched. This may be confusing to users, since the loading indicator may not be obvious enough. This would be a point to test in user research.
+
+### Icon Sizes
+The icons for forks and stars may be a bit too small for most people to comfortably read.
 
 ### Google Analytics
 The event tracking is not actually firing network requests. I'm not sure why this is.
