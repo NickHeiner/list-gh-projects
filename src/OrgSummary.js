@@ -7,7 +7,14 @@ import Author from './Author';
 import {css} from 'glamor';
 
 const sumBy = (obj, iteratee) => _(obj).map(iteratee).sum();
-const countTopCommittersToShow = 5;
+const countTopCommittersToShow = 3;
+
+const TotalStatsRow = ({label, attr, org}) => (
+  <tr>
+    <td>{label}</td>
+    <td><FormattedNumber>{sumBy(org.repos, repo => repo[attr].totalCount)}</FormattedNumber></td>
+  </tr>
+);
 
 const OrgSummary = ({org}) => {
   const oneWeekAgo = moment().subtract(1, 'week');
@@ -42,14 +49,9 @@ const OrgSummary = ({org}) => {
         <h3>All Time Stats</h3>
         <table>
           <tbody>
-            <tr>
-              <td>Total stars:</td>
-              <td><FormattedNumber>{sumBy(org.repos, repo => repo.stargazers.totalCount)}</FormattedNumber></td>
-            </tr>
-            <tr>
-              <td>Total forks:</td>
-              <td><FormattedNumber>{sumBy(org.repos, repo => repo.forks.totalCount)}</FormattedNumber></td>
-            </tr>
+            <TotalStatsRow org={org} label="Total stars:" attr="stargazers" />
+            <TotalStatsRow org={org} label="Total forks:" attr="forks" />
+            <TotalStatsRow org={org} label="Total issues:" attr="issues" />
           </tbody>
         </table>
       </div>

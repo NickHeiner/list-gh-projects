@@ -22,6 +22,9 @@ const makeGithubApiRequest = (orgName, cursor = null) => axios.post('https://api
                   stargazers {
                     totalCount
                   }
+                  issues {
+                    totalCount
+                  }
                   defaultBranchRef {
                     target {
                       ... on Commit {
