@@ -1,6 +1,6 @@
 import React from 'react';
 import {css} from 'glamor';
-import {SMALL_SIZE_MEDIA_QUERY} from './Constants';
+import {SMALL_SIZE_MEDIA_QUERY} from './lib/Constants';
 import moment from 'moment';
 import DiffAdditionsDeletions from './DiffAdditionsDeletions';
 import Author from './Author';

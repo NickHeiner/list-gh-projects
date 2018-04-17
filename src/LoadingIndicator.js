@@ -2,7 +2,7 @@ import LinearProgress from 'material-ui/LinearProgress';
 import React from 'react';
 import {connect} from 'react-redux';
 import _ from 'lodash';
-import {REQUEST_STATUS, STYLES} from './Constants';
+import {REQUEST_STATUS, STYLES} from './lib/Constants';
 import {withRouter} from 'react-router-dom';
 
 const normalizeOrgName = _.toLower;

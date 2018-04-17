@@ -1,8 +1,8 @@
 import React from 'react';
 import {withRouter} from 'react-router-dom';
 import {css} from 'glamor';
-import {SMALL_SIZE_MEDIA_QUERY} from './Constants';
-import track from './Track';
+import {SMALL_SIZE_MEDIA_QUERY} from './lib/Constants';
+import track from './lib/Track';
 
 class Header extends React.PureComponent {
   handleOrgNameChange = event => {

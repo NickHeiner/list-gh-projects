@@ -2,13 +2,13 @@ import React from 'react';
 import {withRouter} from 'react-router-dom';
 import {css} from 'glamor';
 import RepoResultItem from './RepoResultItem';
-import {REQUEST_STATUS, COUNT_COMMITS_TO_SHOW} from './Constants';
+import {REQUEST_STATUS, COUNT_COMMITS_TO_SHOW} from './lib/Constants';
 import {connect} from 'react-redux';
 import {startRequestGroup, setRepoFilter} from './redux/actions';
 import {bindActionCreators} from 'redux';
 import _ from 'lodash';
 import {AutoSizer, List} from 'react-virtualized';
-import getStringMatch from './GetStringMatch';
+import getStringMatch from './lib/GetStringMatch';
 import OrgSummary from './OrgSummary';
 import BareList from './BareList';
 

@@ -7,7 +7,7 @@ import {css} from 'glamor';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import ResultsPage from './ResultsPage';
 import LoadingIndicator from './LoadingIndicator';
-import {SMALL_SIZE_MEDIA_QUERY, STYLES} from './Constants';
+import {SMALL_SIZE_MEDIA_QUERY, STYLES} from './lib/Constants';
 import ReduxFrame from './redux/ReduxFrame';
 import Header from './Header';
 

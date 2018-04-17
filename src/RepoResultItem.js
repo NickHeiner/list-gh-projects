@@ -2,7 +2,7 @@ import React from 'react';
 import {css} from 'glamor';
 import FormattedNumber from './FormattedNumber';
 import CommitResultItem from './CommitResultItem';
-import {COUNT_COMMITS_TO_SHOW} from './Constants';
+import {COUNT_COMMITS_TO_SHOW} from './lib/Constants';
 import HighlightMatches from './HighlightMatches';
 import Star from 'material-ui/svg-icons/toggle/star';
 import CallSplit from 'material-ui/svg-icons/communication/call-split';

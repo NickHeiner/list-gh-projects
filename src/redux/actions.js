@@ -1,6 +1,6 @@
-import {REQUEST_STATUS} from '../Constants';
+import {REQUEST_STATUS} from '../lib/Constants';
 import moment from 'moment';
-import track from '../Track';
+import track from '../lib/Track';
 import makeGithubApiRequest from '../Api';
 import _ from 'lodash';
 

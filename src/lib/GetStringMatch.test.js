@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import getStringMatch from './GetStringMatch';
+import getStringMatch from './lib/GetStringMatch';
 
 it('returns null for no match', () => {
   expect(getStringMatch('demo', 'no-match')).toBeNull();

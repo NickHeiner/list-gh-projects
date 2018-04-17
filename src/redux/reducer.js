@@ -1,6 +1,6 @@
 import {names} from './actions';
 import update from 'immutability-helper';
-import {REQUEST_STATUS} from '../Constants';
+import {REQUEST_STATUS} from '../lib/Constants';
 import _ from 'lodash';
 
 const reducer = (state, action) => {
