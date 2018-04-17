@@ -32,6 +32,8 @@ This app allows job seekers to assess companies via a broad overview of an organ
 
 I consider myself to be an "information architecture" designer, but not a visual designer. I believe that the layout of the app is a reasonable way to communicate and enable a user to accomplish the intended goals. However, I would not consider it to be particularly visually compelling. :smile:
 
+Because the using the app is primarily an exercise in vertical scrolling, I tried to be economical with vertical spacing.
+
 ### Redux vs. `setState`
 Most of my apps end up using Redux, but I started this one on `setState` because Redux felt like overkill. However, when I started doing paged queries to fetch all repos, `setState` actually became much more challenging to use.
 
@@ -138,12 +140,6 @@ To try this out, visit the app, and search for a few orgs. Once they're done loa
 ### Request Robustness
 Loading all the repos for an org takes multiple requests. If any of those requests fail, the entire loading process stops. Sometimes, the GitHub API will randomly fail. The client does not handle this robustly by retrying, potentially with exponential back-off.
 
-### Loading Indicator Subtlety 
-The org summary view is incomplete while the org repos load. The numbers update as new data is fetched. This may be confusing to users, since the loading indicator may not be obvious enough. This would be a point to test in user research.
-
-### Icon Sizes
-The icons for forks and stars may be a bit too small for most people to comfortably read.
-
 ### Google Analytics
 The event tracking is not actually firing network requests. I'm not sure why this is.
 
@@ -151,6 +147,16 @@ The event tracking is not actually firing network requests. I'm not sure why thi
 I use react-virtualized to avoid rendering the entire data set into the DOM at once. This keeps the UI smooth, even as the user is typing to filter by repo name. To make this work, I had to give all row elements a fixed height. There are more sophisticated approaches that handle dynamic row heights.
 
 Additionally, if the screen size gets too narrow, then the rows get taller, and the layout is broken.
+
+## Potential Improvements That User Testing May Reveal
+### Loading Indicator Subtlety 
+The org summary view is incomplete while the org repos load. The numbers update as new data is fetched. This may be confusing to users, since the loading indicator may not be obvious enough. This would be a point to test in user research.
+
+### Icon Sizes
+The icons for forks and stars may be a bit too small for most people to comfortably read.
+
+### Filter Input Location
+The "filter repo" input is located above the org summary. I did this so the org summary can scroll out of view as the user looks through the repo list. However, this could create confusion where users think that the stats in the org summary only reflect the filtered set of repos.
 
 ## Things I'd Add If I Had More Time
 ### Tests
