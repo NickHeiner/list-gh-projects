@@ -32,7 +32,7 @@ class UnconnectedResultsPage extends React.PureComponent {
 
     const cachedEntry = this.props.response;
 
-    if (cachedEntry) {
+    if (_.get(cachedEntry, 'repos')) {
       const controlBarStyles = css({
         display: 'flex',
         justifyContent: 'space-between',
@@ -44,10 +44,6 @@ class UnconnectedResultsPage extends React.PureComponent {
   
       const labelStyles = css({
         marginRight: `${labelMarginPx}px`
-      });
-  
-      const loadedStyles = css({
-        marginRight: `${labelMarginPx * 2}px`
       });
   
       const matchedRepos = _(cachedEntry.repos)
@@ -66,7 +62,6 @@ class UnconnectedResultsPage extends React.PureComponent {
 
       return <div {...rootStyles}>
         <div {...controlBarStyles}>
-          <span {...loadedStyles}>Loaded {_.size(cachedEntry.repos)} of {cachedEntry.totalCount} repos.</span>
           <div>
             <span {...labelStyles}>Filter repos:</span>
             <input type="text" 
@@ -104,7 +99,7 @@ class UnconnectedResultsPage extends React.PureComponent {
       return <p>Request for {this.getOrgName()} failed.</p>;
     }
 
-    if (cachedEntry === null) {
+    if (cachedEntry && !cachedEntry.repos) {
       // It could be that the organization is not publicly visible,
       // in which case GH would not even confirm its existence. In that case, 
       // we would want to make this error message a bit more precise. Can

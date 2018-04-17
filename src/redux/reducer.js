@@ -26,7 +26,7 @@ const reducer = (state, action) => {
       responses: {
         [action.payload.orgName]: prevVal => {
           if (!action.payload.repos) {
-            return null;
+            return _.pick(action.payload, 'savedAtUTC');
           }
 
           return {
