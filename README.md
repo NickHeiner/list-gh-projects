@@ -15,6 +15,21 @@ I did this entirely as a client-side app, because there is no need for server-si
 
 I implemented the app using React. I like React's core abstraction of a function from state to UI elements – it's much easier to reason about than the `$scope.$watch`-soup that my Angular.JS 1.x apps have become. I used to think that Angular.JS 1.x and React were a generational advance over jQuery. However, after using React extensively, I think that React is actually a generational advance from Angular.JS itself. (The full explanation of my reasoning beyond the scope of this document, but I'm happy to elaborate elsewhere.)
 
+### Functionality
+This app allows job seekers to assess companies via a broad overview of an organization's activity on GitHub. (I did the user research for this by consulting myself :smile:.) The goal is to give a high-level summary, with links to dig in deeper to interesting repos and commits. In support of this goal:
+
+1. The org summary view provides high-level summary statistics about how popular an org's repos are on GitHub, and how much active development is occurring. 
+  1. The "recent authors" display allows the job seeker to reach out to people who are currently involved with the company.
+  1. The "unique committers" data point gives the job seeker a sense of the company's scale and commitment to open source.
+  1. The "total forks" data point is an indicator of the broader OSS community's involvement in the company's projects.
+1. The repo list, sorted by popularity, allows the user to quickly identify the org's most well-known projects.
+1. The filter textbox allows the user to find repos that are of particular interest. For instance, searching for `react` on Facebook's org will show all react-related projects.
+  1. To make it easier to find projects with known names, the search supports interpolated matching. For instance, `c-r-a` will match `create-react-app`.
+1. react-virtualized keeps the UI fluid, so users are not frustrated.
+1. Offline access enables users to keep working even when the network is unreliable.
+
+I consider myself to be an "information architecture" designer, but not a visual designer. I believe that the layout of the app is a reasonable way to communicate and enable a user to accomplish the intended goals. However, I would not consider it to be particularly visually compelling. :smile:
+
 ### Redux vs. `setState`
 Most of my apps end up using Redux, but I started this one on `setState` because Redux felt like overkill. However, when I started doing paged queries to fetch all repos, `setState` actually became much more challenging to use.
 
@@ -99,7 +114,7 @@ Also, by combining all details necessary to render a component within the compon
 
 ## Corners I Cut
 ### Visual Design
-I am not a visual designer. I stole the color scheme from GitHub.
+As noted above, I'm not a visual designer. I stole the color scheme from GitHub. 
 
 There are a few small visual bugs. For instance, the main search box has an unsightly black border on the left and top sides.
 
@@ -139,9 +154,3 @@ I added a few `aria` attributes to promote accessibility. However, there is more
 1. Add `aria` attributes to the `table`s for the recent commits view, so assistive technologies could easily navigate them.
 1. Use ARIA roles to show assistive technology where the search and filter fields are.
 1. Ensure that colors have sufficient contrast.
-
-### Favicon
-I wanted to replace the default `create-react-app` favicon with the image of a comforting bear:
-
-![Sgt Grumbles](./SgtGrumbles.png)
-
