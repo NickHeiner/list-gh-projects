@@ -56,7 +56,7 @@ const OrgSummary = ({org}) => {
         </table>
       </div>
       <div>
-        <h3>Activity In The Past Week</h3>
+        <h3>Recent Activity</h3>
         <div {...displayFlex}>
           <table>
             <tbody>
@@ -81,7 +81,7 @@ const OrgSummary = ({org}) => {
         </div>
       </div>
       <div>         
-        <h3>Authors With Commits In The Past Week</h3>
+        <h3>Authors With Recent Commits</h3>
         <table>
           <tbody>
             {

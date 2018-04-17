@@ -158,6 +158,9 @@ The icons for forks and stars may be a bit too small for most people to comforta
 ### Filter Input Location
 The "filter repo" input is located above the org summary. I did this so the org summary can scroll out of view as the user looks through the repo list. However, this could create confusion where users think that the stats in the org summary only reflect the filtered set of repos.
 
+### Org Summary Banded Rows
+In the org summary, it may improve readability to use banded rows for the statistics tables. I chose not to, because I thought that it was readable as-is, and adding banding would just add visual weight to the page. But users may feel differently.
+
 ## Things I'd Add If I Had More Time
 ### Tests
 If I had time to add tests, I'd favor Selenium-driven browser integration tests. Ideally, they would run using a tool like SauceLabs or BrowserStack to test multiple browser / OS combos. 
