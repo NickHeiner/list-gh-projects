@@ -7,3 +7,7 @@ export const REQUEST_STATUS = {
 };
 
 export const REPO_ROW_HEIGHT = 285;
+
+export const STYLES = {
+  HEADER_BACKGROUND_COLOR: '#24292e'
+};

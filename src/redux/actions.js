@@ -16,7 +16,7 @@ export const names = {
  */
 const cacheLifetimeMs = moment.duration(1, 'hour').asMilliseconds();
 
-const sleepDurationMs = moment.duration(2, 'seconds').asMilliseconds();
+const sleepDurationMs = moment.duration(1, 'seconds').asMilliseconds();
 const sleep = () => new Promise((resolve, reject) => setTimeout(resolve, sleepDurationMs));
 
 // eslint-disable-next-line space-before-function-paren
