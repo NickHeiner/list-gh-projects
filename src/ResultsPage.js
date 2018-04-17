@@ -23,6 +23,9 @@ class UnconnectedResultsPage extends React.PureComponent {
   
   componentDidUpdate() {
     this.props.startRequestGroup(this.getOrgName());
+    if (this.listRef) {
+      this.listRef.recomputeRowHeights();
+    }
   }
 
   getRepos() {
@@ -59,6 +62,10 @@ class UnconnectedResultsPage extends React.PureComponent {
     return getInnerRowHeightPx() + marginHeight;
   }
   /* eslint-enable no-magic-numbers */
+
+  setListRef = ref => {
+    this.listRef = ref;
+  };
 
   render() {
     if (!this.getOrgName()) {
@@ -108,6 +115,7 @@ class UnconnectedResultsPage extends React.PureComponent {
           <AutoSizer>
             {({height, width}) => (
               <List
+                ref={this.setListRef}
                 rowCount={matchedRepos.length + 1}
                 height={height}
                 rowHeight={this.getRowHeightPx}
