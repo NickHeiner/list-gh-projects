@@ -2,9 +2,9 @@ import React from 'react';
 import _ from 'lodash';
 import FormattedNumber from './FormattedNumber';
 import moment from 'moment';
+import {css} from 'glamor';
 import DiffAdditionsDeletions from './DiffAdditionsDeletions';
 import Author from './Author';
-import {css} from 'glamor';
 
 const sumBy = (obj, iteratee) => _(obj).map(iteratee).sum();
 const countTopCommittersToShow = 3;
@@ -69,7 +69,7 @@ const OrgSummary = ({org}) => {
                 <td><FormattedNumber>{_.uniqBy(allCommits, ({author}) => author.name).length}</FormattedNumber></td>
               </tr>
               <tr>
-                <td>Net diff size:</td>
+                <td>Total diff size:</td>
                 <td>
                   <DiffAdditionsDeletions 
                     additions={_.sumBy(allCommits, 'additions')} 

@@ -2,7 +2,7 @@ import React from 'react';
 import {withRouter} from 'react-router-dom';
 import {css} from 'glamor';
 import RepoResultItem from './RepoResultItem';
-import {REQUEST_STATUS, REPO_ROW_HEIGHT} from './Constants';
+import {REQUEST_STATUS, COUNT_COMMITS_TO_SHOW} from './Constants';
 import {connect} from 'react-redux';
 import {startRequestGroup, setRepoFilter} from './redux/actions';
 import {bindActionCreators} from 'redux';
@@ -25,6 +25,41 @@ class UnconnectedResultsPage extends React.PureComponent {
     this.props.startRequestGroup(this.getOrgName());
   }
 
+  getRepos() {
+    return _(this.props.response.repos)
+      .values()
+    // For perf, we could do this sort in a Redux selector.
+      .sortBy(repo => -repo.stargazers.totalCount)
+      .map(repo => ({repo, match: getStringMatch(this.props.repoFilter, repo.name)}))
+      .filter(repo => !this.props.repoFilter || repo.match)
+      .value();
+  }
+
+  /* eslint-disable no-magic-numbers */
+  getRowHeightPx = ({index}) => {
+    const getInnerRowHeightPx = () => {
+      if (index === 0) {
+        return 100;
+      }
+      const {repo} = this.getRepos()[index - 1];
+      const countVisibleCommits = Math.min(
+        _.get(repo, ['defaultBranchRef', 'target', 'history', 'nodes', 'length'], 0),
+        COUNT_COMMITS_TO_SHOW
+      );
+      
+      if (!countVisibleCommits) {
+        return 110;
+      }
+      
+      return 50 + countVisibleCommits * 40;
+
+    };
+
+    const marginHeight = 20;
+    return getInnerRowHeightPx() + marginHeight;
+  }
+  /* eslint-enable no-magic-numbers */
+
   render() {
     if (!this.getOrgName()) {
       return null;
@@ -46,18 +81,16 @@ class UnconnectedResultsPage extends React.PureComponent {
         marginRight: `${labelMarginPx}px`
       });
   
-      const matchedRepos = _(cachedEntry.repos)
-        .values()
-        // For perf, we could do this sort in a Redux selector.
-        .sortBy(repo => -repo.stargazers.totalCount)
-        .map(repo => ({repo, match: getStringMatch(this.props.repoFilter, repo.name)}))
-        .filter(repo => !this.props.repoFilter || repo.match)
-        .value();
+      const matchedRepos = this.getRepos();    
   
       const rootStyles = css({
         display: 'flex', 
         flexDirection: 'column',
         height: '100%'
+      });
+
+      const listElemStyles = css({
+        // marginBottom: '10px'
       });
 
       return <div {...rootStyles}>
@@ -77,15 +110,17 @@ class UnconnectedResultsPage extends React.PureComponent {
               <List
                 rowCount={matchedRepos.length + 1}
                 height={height}
-                rowHeight={REPO_ROW_HEIGHT}
+                rowHeight={this.getRowHeightPx}
                 // TODO It's considered poor form to define an inline function in render(), because it dooms
                 // us to always re-rendering the component, because the props will always be different, 
                 // because two separately created functions will never be evaluated as equal.
                 rowRenderer={
                   ({index, key, style}) => 
                     index
-                      ? <li key={key} style={style}><RepoResultItem matchedRepo={matchedRepos[index - 1]} /></li>
-                      : <OrgSummary org={cachedEntry} />
+                      ? <li key={key} style={style} {...listElemStyles}>
+                        <RepoResultItem matchedRepo={matchedRepos[index - 1]} />
+                      </li>
+                      : <div style={style} {...listElemStyles}><OrgSummary org={cachedEntry} /></div>
                 }
                 width={width}
               />

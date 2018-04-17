@@ -8,6 +8,8 @@ export const REQUEST_STATUS = {
 
 export const REPO_ROW_HEIGHT = 285;
 
+export const COUNT_COMMITS_TO_SHOW = 5;
+
 export const STYLES = {
   HEADER_BACKGROUND_COLOR: '#24292e'
 };
