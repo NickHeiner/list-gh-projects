@@ -148,6 +148,11 @@ I use react-virtualized to avoid rendering the entire data set into the DOM at o
 
 Additionally, if the screen size gets too narrow, then the rows get taller, and the layout is broken.
 
+### "Recent" Activity in Org Summary
+Although I think that the org summary is a useful high-level indicator, the stats are measured somewhat oddly. The stats are generated from commits that are both within the most recent 10 commits to a repo and and within the past week. I would rather just measure all commits that are within a week. To improve this, I would use the `since:` parameter in the GH API.
+
+Additionally, my goal with the "Recent Contributors" view was to highlight people who are recently active in the organization. However, any quantitative metric of developer impact is problematic. I chose to rank people by how many commits they've pushed, but that metric can be misleading.
+
 ## Potential Improvements That User Testing May Reveal
 ### Loading Indicator Subtlety 
 The org summary view is incomplete while the org repos load. The numbers update as new data is fetched. This may be confusing to users, since the loading indicator may not be obvious enough. This would be a point to test in user research.
