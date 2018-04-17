@@ -25,6 +25,7 @@ This app allows job seekers to assess companies via a broad overview of an organ
 1. The repo list, sorted by popularity, allows the user to quickly identify the org's most well-known projects.
 1. The filter textbox allows the user to find repos that are of particular interest. For instance, searching for `react` on Facebook's org will show all react-related projects.
   1. To make it easier to find projects with known names, the search supports interpolated matching. For instance, `c-r-a` will match `create-react-app`.
+1. Each repo displays the most recent five commits. The goal is not to provide a comprehensive overview of recent commits for a project; that would be better accomplished on the relevant GitHub page itself. Instead, I just wanted to give a quick summary, so the job seeker could get a feel for the style of development on each project. How meaningful are the commit messages? Does the project follow a convention around tagging issues or PRs for each commit? How big are the commits? To give a quick overview, and allow multiple projects to be displayed on the page at once, it's better to display fewer commits. 
 1. react-virtualized keeps the UI fluid, so users are not frustrated.
 1. Offline access enables users to keep working even when the network is unreliable.
 
