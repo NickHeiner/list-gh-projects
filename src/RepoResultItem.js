@@ -12,13 +12,6 @@ const RepoResultItem = ({matchedRepo, index}) => {
     border: '1px rgb(234, 236, 239) solid',
     marginBottom: '10px',
     padding: '5px',
-    '& a': {
-      color: '#0366d6',
-      textDecoration: 'none',
-      ':hover': {
-        textDecoration: 'underline'
-      }
-    },
     minHeight: `${REPO_ROW_HEIGHT}px`
   });
   const headerRowStyles = css({

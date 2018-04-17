@@ -26,6 +26,7 @@ This app allows job seekers to assess companies via a broad overview of an organ
 1. The filter textbox allows the user to find repos that are of particular interest. For instance, searching for `react` on Facebook's org will show all react-related projects.
   1. To make it easier to find projects with known names, the search supports interpolated matching. For instance, `c-r-a` will match `create-react-app`.
 1. Each repo displays the most recent five commits. The goal is not to provide a comprehensive overview of recent commits for a project; that would be better accomplished on the relevant GitHub page itself. Instead, I just wanted to give a quick summary, so the job seeker could get a feel for the style of development on each project. How meaningful are the commit messages? Does the project follow a convention around tagging issues or PRs for each commit? How big are the commits? To give a quick overview, and allow multiple projects to be displayed on the page at once, it's better to display fewer commits. 
+1. The repo is determined by the pathname. The job seeker can save a list of links in their notes (such as https://nickheiner.github.io/list-gh-projects/#/department-of-veterans-affairs and https://nickheiner.github.io/list-gh-projects/#/facebook). This allows for easy side-by-side comparison, and for quickly revisiting previously viewed orgs to see what has changed. It also makes it easy to share interesting results.
 1. react-virtualized keeps the UI fluid, so users are not frustrated.
 1. Offline access enables users to keep working even when the network is unreliable.
 
@@ -121,6 +122,11 @@ There are a few small visual bugs. For instance, the main search box has an unsi
 
 ### Responsive Design
 A proper responsive design starts with the smallest supported screen size, and adds content progressively. In contrast, I designed for my 15" Macbook screen, and put in a few patches to make it marginally less appalling on mobile.
+
+### Hash-based URL
+This app uses (e.g. `#/netflix`) instead of HTML5 `pushState` URLs (e.g. `/facebook`). Typically, one would want to use HTML5, and degrade to hash-based URLs for older browsers. However, GitHub pages does server-side routing based on the request pathname. If the user visited the home page of the app, then searched for `facebook`, their browser would be on `{hostname}/facebook`. When they hit refresh, GitHub pages would look for `facebook.html` in this project, not find it, and return the `404` page instead.
+
+You can work around this by having the `404` page also be part of the single page app, and do client-side routing. However, by just using a hash URL, I can bypass the issue entirely. The hash is not sent to the server, the GitHub pages will return `index.html`, and the client can handle routing. 
 
 ### Offline
 create-react-app adds uses a plugin to cache static assets with a service worker. I could have also used this to cache GH API requests, but that would have required ejecting create-react-app, which would have made the project much more complicated. Instead, I just used `localStorage`. This basically works, although is fairly coarse-grained as a caching mechanism. In particular, we're caching entire org data sets, which are composed of many API request responses. This may lead to some annoying edge cases that we would not experience if we were caching on a per-request level. Doing the caching in the service worker also has the benefit of being completely encapsulated from the rest of the app.

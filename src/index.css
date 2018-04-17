@@ -6,6 +6,15 @@ table {
   border-spacing: 0;
 }
 
+a {
+  color: #0366d6;
+  text-decoration: none
+}
+
+a:hover {
+  text-decoration: underline
+}
+
 body {
   color: #444;
   margin: 0;
